@@ -1,0 +1,29 @@
+{
+  "name": "cordova-plugin-rtc-qiniu",
+  "version": "0.0.1",
+  "description": "基于七牛云实时音视频的视频会议",
+  "cordova": {
+    "id": "cordova-plugin-rtc-qiniu",
+    "platforms": [
+      "ios",
+      "android"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitee.com/hankersyan/cordova-plugin-rtc-qiniu"
+  },
+  "keywords": [
+    "cordova",
+    "plugin",
+    "rtc",
+    "video",
+    "conference"
+  ],
+  "author": "hankersyan <hankersyan@msn.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitee.com/hankersyan/cordova-plugin-rtc-qiniu/issues"
+  },
+  "homepage": "https://gitee.com/hankersyan/cordova-plugin-rtc-qiniu#readme"
+}

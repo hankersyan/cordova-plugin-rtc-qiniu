@@ -1,0 +1,203 @@
+<?xml version='1.0' encoding='utf-8'?>
+<plugin id="cordova-plugin-rtc-qiniu" version="0.2.1" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+    <name>cordova-plugin-rtc-qiniu</name>
+    <preference name="APPID" />
+    <js-module name="cordova-plugin-rtc-qiniu" src="www/qnrtc.js">
+        <clobbers target="QNRtc" />
+    </js-module>
+
+    <!-- android -->
+    <platform name="android">
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="QNRtc">
+                <param name="android-package" value="cordova.plugin.qnrtc.QNRtc"/>
+            </feature>
+        </config-file>
+        <config-file target="AndroidManifest.xml" parent="/*">
+			<uses-permission android:name="android.permission.INTERNET" />
+			<uses-permission android:name="android.permission.RECORD_AUDIO" />
+			<uses-permission android:name="android.permission.CAMERA" />
+			<uses-permission android:name="android.permission.FLASHLIGHT" />
+			<uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+			<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+			<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+			<uses-permission android:name="android.permission.READ_PHONE_STATE" />
+			<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+			<uses-permission android:name="android.permission.READ_LOGS" />
+			<uses-permission android:name="android.permission.WAKE_LOCK" />
+        </config-file>
+        <config-file target="AndroidManifest.xml" parent="/manifest/application">
+			<activity android:configChanges="orientation|smallestScreenSize|screenSize|screenLayout" android:launchMode="singleTop" android:name="cordova.plugin.qnrtc.activity.RoomActivity" android:screenOrientation="portrait" />
+        </config-file>
+
+        <!-- Plugin souce code -->
+        <source-file src="src/android/QNRtc.java" target-dir="src/cordova/plugin/qnrtc" />
+        <source-file src="src/android/activity/RoomActivity.java" target-dir="src/cordova/plugin/qnrtc/activity" />
+        <source-file src="src/android/fragment/ControlFragment.java" target-dir="src/cordova/plugin/qnrtc/fragment" />
+        <source-file src="src/android/ui/LocalVideoView.java" target-dir="src/cordova/plugin/qnrtc/ui" />
+        <source-file src="src/android/ui/RemoteVideoView.java" target-dir="src/cordova/plugin/qnrtc/ui" />
+        <source-file src="src/android/ui/RTCVideoView.java" target-dir="src/cordova/plugin/qnrtc/ui" />
+        <source-file src="src/android/utils/Config.java" target-dir="src/cordova/plugin/qnrtc/utils" />
+        <source-file src="src/android/utils/HttpConnection.java" target-dir="src/cordova/plugin/qnrtc/utils" />
+        <source-file src="src/android/utils/PermissionChecker.java" target-dir="src/cordova/plugin/qnrtc/utils" />
+        <source-file src="src/android/utils/ToastUtils.java" target-dir="src/cordova/plugin/qnrtc/utils" />
+        <source-file src="src/android/utils/UpdateApkFileProvider.java" target-dir="src/cordova/plugin/qnrtc/utils" />
+        <source-file src="src/android/utils/Utils.java" target-dir="src/cordova/plugin/qnrtc/utils" />
+        <source-file src="src/android/utils/QNAppServer.java" target-dir="src/cordova/plugin/qnrtc/utils" />
+
+		<edit-config file="AndroidManifest.xml" target="/manifest/uses-sdk" mode="merge">
+			<uses-sdk android:minSdkVersion="17" />
+		</edit-config>
+
+        <framework src="com.android.support:appcompat-v7:25.4.0"/>
+
+        <!-- sdk -->
+        <source-file src="src/android/libs/qndroid-rtc-1.2.0.jar" target-dir="app/libs"/>
+        <resource-file src="src/android/libs/armeabi-v7a/libqndroid_rtc.so" target="jniLibs/armeabi-v7a/libqndroid_rtc.so"/>
+        <resource-file src="src/android/libs/armeabi-v7a/libqndroid_beauty.so" target="jniLibs/armeabi-v7a/libqndroid_beauty.so"/>
+
+		<resource-file src="src/android/res/drawable/microphone_state_enable.xml" target="res/drawable/microphone_state_enable.xml" />
+		<resource-file src="src/android/res/drawable-hdpi/disconnect.png" target="res/drawable-hdpi/disconnect.png" />
+
+		<resource-file src="src/android/res/layout/activity_room.xml" target="res/layout/activity_room.xml" />
+		<resource-file src="src/android/res/layout/fragment_room.xml" target="res/layout/fragment_room.xml" />
+		<resource-file src="src/android/res/layout/local_video_view.xml" target="res/layout/local_video_view.xml" />
+		<resource-file src="src/android/res/layout/remote_video_view.xml" target="res/layout/remote_video_view.xml" />
+
+		<resource-file src="src/android/res/mipmap-hdpi/back.png" target="res/mipmap-hdpi/back.png" />
+		<resource-file src="src/android/res/mipmap-hdpi/camera_switch_end.png" target="res/mipmap-hdpi/camera_switch_end.png" />
+		<resource-file src="src/android/res/mipmap-hdpi/camera_switch_front.png" target="res/mipmap-hdpi/camera_switch_front.png" />
+		<resource-file src="src/android/res/mipmap-hdpi/close_phone.png" target="res/mipmap-hdpi/close_phone.png" />
+		<resource-file src="src/android/res/mipmap-hdpi/copy.png" target="res/mipmap-hdpi/copy.png" />
+		<resource-file src="src/android/res/mipmap-hdpi/face_beauty_close.png" target="res/mipmap-hdpi/face_beauty_close.png" />
+		<resource-file src="src/android/res/mipmap-hdpi/face_beauty_open.png" target="res/mipmap-hdpi/face_beauty_open.png" />
+		<resource-file src="src/android/res/mipmap-hdpi/icon_arrow_down.png" target="res/mipmap-hdpi/icon_arrow_down.png" />
+		<resource-file src="src/android/res/mipmap-hdpi/log_btn.png" target="res/mipmap-hdpi/log_btn.png" />
+		<resource-file src="src/android/res/mipmap-hdpi/loudspeaker_disable.png" target="res/mipmap-hdpi/loudspeaker_disable.png" />
+		<resource-file src="src/android/res/mipmap-hdpi/loudspeaker.png" target="res/mipmap-hdpi/loudspeaker.png" />
+		<resource-file src="src/android/res/mipmap-hdpi/microphone_disable.png" target="res/mipmap-hdpi/microphone_disable.png" />
+		<resource-file src="src/android/res/mipmap-hdpi/microphone.png" target="res/mipmap-hdpi/microphone.png" />
+		<resource-file src="src/android/res/mipmap-hdpi/screen_share_disable.png" target="res/mipmap-hdpi/screen_share_disable.png" />
+		<resource-file src="src/android/res/mipmap-hdpi/screen_share.png" target="res/mipmap-hdpi/screen_share.png" />
+		<resource-file src="src/android/res/mipmap-hdpi/setting.png" target="res/mipmap-hdpi/setting.png" />
+		<resource-file src="src/android/res/mipmap-hdpi/video_close.png" target="res/mipmap-hdpi/video_close.png" />
+		<resource-file src="src/android/res/mipmap-hdpi/video_open.png" target="res/mipmap-hdpi/video_open.png" />
+		
+		<resource-file src="src/android/res/mipmap-mdpi/back.png" target="res/mipmap-mdpi/back.png" />
+		<resource-file src="src/android/res/mipmap-mdpi/camera_switch_end.png" target="res/mipmap-mdpi/camera_switch_end.png" />
+		<resource-file src="src/android/res/mipmap-mdpi/camera_switch_front.png" target="res/mipmap-mdpi/camera_switch_front.png" />
+		<resource-file src="src/android/res/mipmap-mdpi/close_phone.png" target="res/mipmap-mdpi/close_phone.png" />
+		<resource-file src="src/android/res/mipmap-mdpi/copy.png" target="res/mipmap-mdpi/copy.png" />
+		<resource-file src="src/android/res/mipmap-mdpi/face_beauty_close.png" target="res/mipmap-mdpi/face_beauty_close.png" />
+		<resource-file src="src/android/res/mipmap-mdpi/face_beauty_open.png" target="res/mipmap-mdpi/face_beauty_open.png" />
+		<resource-file src="src/android/res/mipmap-mdpi/log_btn.png" target="res/mipmap-mdpi/log_btn.png" />
+		<resource-file src="src/android/res/mipmap-mdpi/loudspeaker_disable.png" target="res/mipmap-mdpi/loudspeaker_disable.png" />
+		<resource-file src="src/android/res/mipmap-mdpi/loudspeaker.png" target="res/mipmap-mdpi/loudspeaker.png" />
+		<resource-file src="src/android/res/mipmap-mdpi/microphone_disable.png" target="res/mipmap-mdpi/microphone_disable.png" />
+		<resource-file src="src/android/res/mipmap-mdpi/microphone.png" target="res/mipmap-mdpi/microphone.png" />
+		<resource-file src="src/android/res/mipmap-mdpi/screen_share_disable.png" target="res/mipmap-mdpi/screen_share_disable.png" />
+		<resource-file src="src/android/res/mipmap-mdpi/screen_share.png" target="res/mipmap-mdpi/screen_share.png" />
+		<resource-file src="src/android/res/mipmap-mdpi/setting.png" target="res/mipmap-mdpi/setting.png" />
+		<resource-file src="src/android/res/mipmap-mdpi/video_close.png" target="res/mipmap-mdpi/video_close.png" />
+		<resource-file src="src/android/res/mipmap-mdpi/video_open.png" target="res/mipmap-mdpi/video_open.png" />
+
+		<resource-file src="src/android/res/mipmap-xhdpi/back.png" target="res/mipmap-xhdpi/back.png" />
+		<resource-file src="src/android/res/mipmap-xhdpi/camera_switch_end.png" target="res/mipmap-xhdpi/camera_switch_end.png" />
+		<resource-file src="src/android/res/mipmap-xhdpi/camera_switch_front.png" target="res/mipmap-xhdpi/camera_switch_front.png" />
+		<resource-file src="src/android/res/mipmap-xhdpi/close_phone.png" target="res/mipmap-xhdpi/close_phone.png" />
+		<resource-file src="src/android/res/mipmap-xhdpi/copy.png" target="res/mipmap-xhdpi/copy.png" />
+		<resource-file src="src/android/res/mipmap-xhdpi/face_beauty_close.png" target="res/mipmap-xhdpi/face_beauty_close.png" />
+		<resource-file src="src/android/res/mipmap-xhdpi/face_beauty_open.png" target="res/mipmap-xhdpi/face_beauty_open.png" />
+		<resource-file src="src/android/res/mipmap-xhdpi/log_btn.png" target="res/mipmap-xhdpi/log_btn.png" />
+		<resource-file src="src/android/res/mipmap-xhdpi/loudspeaker_disable.png" target="res/mipmap-xhdpi/loudspeaker_disable.png" />
+		<resource-file src="src/android/res/mipmap-xhdpi/loudspeaker.png" target="res/mipmap-xhdpi/loudspeaker.png" />
+		<resource-file src="src/android/res/mipmap-xhdpi/microphone_disable.png" target="res/mipmap-xhdpi/microphone_disable.png" />
+		<resource-file src="src/android/res/mipmap-xhdpi/microphone.png" target="res/mipmap-xhdpi/microphone.png" />
+		<resource-file src="src/android/res/mipmap-xhdpi/screen_share_disable.png" target="res/mipmap-xhdpi/screen_share_disable.png" />
+		<resource-file src="src/android/res/mipmap-xhdpi/screen_share.png" target="res/mipmap-xhdpi/screen_share.png" />
+		<resource-file src="src/android/res/mipmap-xhdpi/setting.png" target="res/mipmap-xhdpi/setting.png" />
+		<resource-file src="src/android/res/mipmap-xhdpi/video_close.png" target="res/mipmap-xhdpi/video_close.png" />
+		<resource-file src="src/android/res/mipmap-xhdpi/video_open.png" target="res/mipmap-xhdpi/video_open.png" />
+
+		<resource-file src="src/android/res/mipmap-xxhdpi/back.png" target="res/mipmap-xxhdpi/back.png" />
+		<resource-file src="src/android/res/mipmap-xxhdpi/camera_switch_end.png" target="res/mipmap-xxhdpi/camera_switch_end.png" />
+		<resource-file src="src/android/res/mipmap-xxhdpi/camera_switch_front.png" target="res/mipmap-xxhdpi/camera_switch_front.png" />
+		<resource-file src="src/android/res/mipmap-xxhdpi/close_phone.png" target="res/mipmap-xxhdpi/close_phone.png" />
+		<resource-file src="src/android/res/mipmap-xxhdpi/copy.png" target="res/mipmap-xxhdpi/copy.png" />
+		<resource-file src="src/android/res/mipmap-xxhdpi/face_beauty_close.png" target="res/mipmap-xxhdpi/face_beauty_close.png" />
+		<resource-file src="src/android/res/mipmap-xxhdpi/face_beauty_open.png" target="res/mipmap-xxhdpi/face_beauty_open.png" />
+		<resource-file src="src/android/res/mipmap-xxhdpi/log_btn.png" target="res/mipmap-xxhdpi/log_btn.png" />
+		<resource-file src="src/android/res/mipmap-xxhdpi/loudspeaker_disable.png" target="res/mipmap-xxhdpi/loudspeaker_disable.png" />
+		<resource-file src="src/android/res/mipmap-xxhdpi/loudspeaker.png" target="res/mipmap-xxhdpi/loudspeaker.png" />
+		<resource-file src="src/android/res/mipmap-xxhdpi/microphone_disable.png" target="res/mipmap-xxhdpi/microphone_disable.png" />
+		<resource-file src="src/android/res/mipmap-xxhdpi/microphone.png" target="res/mipmap-xxhdpi/microphone.png" />
+		<resource-file src="src/android/res/mipmap-xxhdpi/screen_share_disable.png" target="res/mipmap-xxhdpi/screen_share_disable.png" />
+		<resource-file src="src/android/res/mipmap-xxhdpi/screen_share.png" target="res/mipmap-xxhdpi/screen_share.png" />
+		<resource-file src="src/android/res/mipmap-xxhdpi/setting.png" target="res/mipmap-xxhdpi/setting.png" />
+		<resource-file src="src/android/res/mipmap-xxhdpi/video_close.png" target="res/mipmap-xxhdpi/video_close.png" />
+		<resource-file src="src/android/res/mipmap-xxhdpi/video_open.png" target="res/mipmap-xxhdpi/video_open.png" />
+
+		<resource-file src="src/android/res/mipmap-xxxhdpi/back.png" target="res/mipmap-xxxhdpi/back.png" />
+		<resource-file src="src/android/res/mipmap-xxxhdpi/camera_switch_end.png" target="res/mipmap-xxxhdpi/camera_switch_end.png" />
+		<resource-file src="src/android/res/mipmap-xxxhdpi/camera_switch_front.png" target="res/mipmap-xxxhdpi/camera_switch_front.png" />
+		<resource-file src="src/android/res/mipmap-xxxhdpi/close_phone.png" target="res/mipmap-xxxhdpi/close_phone.png" />
+		<resource-file src="src/android/res/mipmap-xxxhdpi/copy.png" target="res/mipmap-xxxhdpi/copy.png" />
+		<resource-file src="src/android/res/mipmap-xxxhdpi/face_beauty_close.png" target="res/mipmap-xxxhdpi/face_beauty_close.png" />
+		<resource-file src="src/android/res/mipmap-xxxhdpi/face_beauty_open.png" target="res/mipmap-xxxhdpi/face_beauty_open.png" />
+		<resource-file src="src/android/res/mipmap-xxxhdpi/log_btn.png" target="res/mipmap-xxxhdpi/log_btn.png" />
+		<resource-file src="src/android/res/mipmap-xxxhdpi/loudspeaker_disable.png" target="res/mipmap-xxxhdpi/loudspeaker_disable.png" />
+		<resource-file src="src/android/res/mipmap-xxxhdpi/loudspeaker.png" target="res/mipmap-xxxhdpi/loudspeaker.png" />
+		<resource-file src="src/android/res/mipmap-xxxhdpi/microphone_disable.png" target="res/mipmap-xxxhdpi/microphone_disable.png" />
+		<resource-file src="src/android/res/mipmap-xxxhdpi/microphone.png" target="res/mipmap-xxxhdpi/microphone.png" />
+		<resource-file src="src/android/res/mipmap-xxxhdpi/screen_share_disable.png" target="res/mipmap-xxxhdpi/screen_share_disable.png" />
+		<resource-file src="src/android/res/mipmap-xxxhdpi/screen_share.png" target="res/mipmap-xxxhdpi/screen_share.png" />
+		<resource-file src="src/android/res/mipmap-xxxhdpi/setting.png" target="res/mipmap-xxxhdpi/setting.png" />
+		<resource-file src="src/android/res/mipmap-xxxhdpi/video_close.png" target="res/mipmap-xxxhdpi/video_close.png" />
+		<resource-file src="src/android/res/mipmap-xxxhdpi/video_open.png" target="res/mipmap-xxxhdpi/video_open.png" />
+
+		<resource-file src="src/android/res/values/qnrtc-colors.xml" target="res/values/qnrtc-colors.xml" />
+		<resource-file src="src/android/res/values/qnrtc-strings.xml" target="res/values/qnrtc-strings.xml" />
+		
+    </platform>
+
+    <!-- iOS -->
+    <platform name="ios">
+        <config-file parent="/*" target="config.xml">
+            <feature name="QNRtc">
+                <param name="ios-package" value="CDVQNRtc"/>
+                <param name="onload" value="true"/>
+            </feature>
+        </config-file>
+
+        <config-file target="*-Info.plist" parent="NSCameraUsageDescription">
+            <string>远程沟通需要使用相机</string>
+        </config-file>
+
+        <config-file target="*-Info.plist" parent="NSMicrophoneUsageDescription">
+            <string>远程沟通需要使用麦克风</string>
+        </config-file>
+
+        <header-file src="src/ios/QRDPublicHeader.h" />
+        <header-file src="src/ios/CDVQNRtc.h" />
+        <source-file src="src/ios/CDVQNRtc.m" />
+        <header-file src="src/ios/QRDRTCViewController.h" />
+        <source-file src="src/ios/QRDRTCViewController.m" />
+        <header-file src="src/ios/QRDUserView.h" />
+        <source-file src="src/ios/QRDUserView.m" />
+        
+		<resource-file src="src/ios/rtc-qiniu.bundle"/>
+
+        <framework src="src/ios/libs/QNRTCKit.framework" embed="true" custom="true" />
+        <framework src="UIKit" />
+        <framework src="AVFoundation" />
+        <framework src="CoreGraphics" />
+        <framework src="CFNetwork" />
+        <framework src="AudioToolbox" />
+        <framework src="CoreMedia" />
+        <framework src="VideoToolbox" />
+<!--
+        <framework src="QNRTCKit" type="podspec" spec="~> 1.2" />
+-->
+    </platform>
+
+</plugin>
