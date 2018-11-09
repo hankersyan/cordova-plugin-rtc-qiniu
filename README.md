@@ -2,6 +2,8 @@
 
 Cordova plugin for RTC/Video conference based on QiNiu Cloud. 基于七牛云实时音视频的视频会议插件.
 
+Support Android/iOS. 支持安卓和苹果.
+
 Please apply for APPID at https://www.qiniu.com/products/rtn . 请先申请你的APPID
 
 ![Bilby Stampede](https://www.qiniu.com/assets/sdk/img-shejiao-0f2d2d077c4f1bc0794b75dfc66e9e582446506e7bb795ebed0821b7af22ff86.png)
