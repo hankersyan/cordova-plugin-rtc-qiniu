@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://gitee.com/hankersyan/cordova-plugin-rtc-qiniu"
+    "url": "git+https://github.com/hankersyan/cordova-plugin-rtc-qiniu"
   },
   "keywords": [
     "cordova",
@@ -23,7 +23,7 @@
   "author": "hankersyan <hankersyan@msn.com>",
   "license": "ISC",
   "bugs": {
-    "url": "https://gitee.com/hankersyan/cordova-plugin-rtc-qiniu/issues"
+    "url": "https://github.com/hankersyan/cordova-plugin-rtc-qiniu/issues"
   },
-  "homepage": "https://gitee.com/hankersyan/cordova-plugin-rtc-qiniu#readme"
+  "homepage": "https://github.com/hankersyan/cordova-plugin-rtc-qiniu#readme"
 }
