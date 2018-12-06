@@ -22,7 +22,6 @@ import android.view.WindowManager.LayoutParams;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
-import com.qbox.QNRTCKitDemo.R;
 import com.qiniu.droid.rtc.QNBeautySetting;
 import com.qiniu.droid.rtc.QNCameraSwitchResultCallback;
 import com.qiniu.droid.rtc.QNRTCManager;
@@ -41,6 +40,7 @@ import cordova.plugin.qnrtc.ui.RTCVideoView;
 import cordova.plugin.qnrtc.utils.Config;
 import cordova.plugin.qnrtc.utils.QNAppServer;
 import cordova.plugin.qnrtc.utils.ToastUtils;
+import io.hankers.qnrtc.R;
 
 import com.qiniu.droid.rtc.model.QNAudioDevice;
 
@@ -186,7 +186,8 @@ public class RoomActivity extends Activity implements QNRoomEventListener, Contr
             }
         }
 
-        SharedPreferences preferences = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
+        int app_name_rid = QNRtc.getResourceId("app_name", "string");
+        SharedPreferences preferences = getSharedPreferences(getString(app_name_rid), Context.MODE_PRIVATE);
         mVideoWidth = preferences.getInt(Config.WIDTH, QNRTCSetting.DEFAULT_WIDTH);
         mVideoHeight = preferences.getInt(Config.HEIGHT, QNRTCSetting.DEFAULT_HEIGHT);
         boolean isHwCodec = preferences.getInt(Config.CODEC_MODE, Config.SW) == Config.HW;

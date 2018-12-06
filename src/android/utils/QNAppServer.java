@@ -5,8 +5,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
-import com.qbox.QNRTCKitDemo.R;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,6 +16,9 @@ import java.util.ArrayList;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
+
+import cordova.plugin.qnrtc.QNRtc;
+import io.hankers.qnrtc.R;
 
 
 public class QNAppServer {
@@ -162,7 +163,8 @@ public class QNAppServer {
     }
 
     private String getAppId(Context context){
-        SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.app_name),Context.MODE_PRIVATE);
+        int app_name_rid = QNRtc.getResourceId("app_name", "string");
+        SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(app_name_rid),Context.MODE_PRIVATE);
         return sharedPreferences.getString(Config.APP_ID, APP_ID);
     }
 }
