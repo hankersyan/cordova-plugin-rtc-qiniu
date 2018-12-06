@@ -45,7 +45,9 @@
         
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:rtcVC];
 
-        [self.viewController presentViewController:nav animated:YES completion:nil];
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            [self.viewController presentViewController:nav animated:YES completion:nil];
+        }];
     }];
 }
 
