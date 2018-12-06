@@ -40,7 +40,6 @@ import cordova.plugin.qnrtc.ui.RTCVideoView;
 import cordova.plugin.qnrtc.utils.Config;
 import cordova.plugin.qnrtc.utils.QNAppServer;
 import cordova.plugin.qnrtc.utils.ToastUtils;
-import io.hankers.qnrtc.R;
 
 import com.qiniu.droid.rtc.model.QNAudioDevice;
 

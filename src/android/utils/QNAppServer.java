@@ -18,7 +18,6 @@ import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 
 import cordova.plugin.qnrtc.QNRtc;
-import io.hankers.qnrtc.R;
 
 
 public class QNAppServer {
