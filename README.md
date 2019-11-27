@@ -45,6 +45,11 @@ oReq.open("GET", "https://api-demo.qnsdk.com/v1/rtc/token/admin/"
 oReq.send();
 ```
 
+# Configuration
+
+#### XCode
+
+1. add "#import "Plugins/cordova-plugin-rtc-qiniu/QRDPublicHeader.h" to <YOUR-PROJECT>-Prefex.pch
 
 # Example
 At first you need install npm/cordova.

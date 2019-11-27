@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<plugin id="cordova-plugin-rtc-qiniu" version="1.0.1" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+<plugin id="cordova-plugin-rtc-qiniu" version="2.0.0" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
     <name>cordova-plugin-rtc-qiniu</name>
     <preference name="APPID" />
     <js-module name="cordova-plugin-rtc-qiniu" src="www/qnrtc.js">
@@ -173,17 +173,84 @@
             <string>远程沟通需要使用麦克风</string>
         </config-file>
 
-        <header-file src="src/ios/QRDPublicHeader.h" />
         <header-file src="src/ios/CDVQNRtc.h" />
         <source-file src="src/ios/CDVQNRtc.m" />
+        <header-file src="src/ios/QRDBaseViewController.h" />
+        <source-file src="src/ios/QRDBaseViewController.m" />
+        <header-file src="src/ios/QRDMergeViewController.h" />
+        <source-file src="src/ios/QRDMergeViewController.m" />
+        <header-file src="src/ios/QRDMicrophoneSource.h" />
+        <source-file src="src/ios/QRDMicrophoneSource.m" />
+        <header-file src="src/ios/QRDNetworkUtil.h" />
+        <source-file src="src/ios/QRDNetworkUtil.m" />
+        <header-file src="src/ios/QRDPublicHeader.h" />
+        <header-file src="src/ios/QRDPureAudioViewController.h" />
+        <source-file src="src/ios/QRDPureAudioViewController.m" />
         <header-file src="src/ios/QRDRTCViewController.h" />
         <source-file src="src/ios/QRDRTCViewController.m" />
+        <header-file src="src/ios/QRDScreenMainViewController.h" />
+        <source-file src="src/ios/QRDScreenMainViewController.m" />
+        <header-file src="src/ios/QRDScreenRecorderViewController.h" />
+        <source-file src="src/ios/QRDScreenRecorderViewController.m" />
+        <header-file src="src/ios/QRDSettingViewController.h" />
+        <source-file src="src/ios/QRDSettingViewController.m" />
         <header-file src="src/ios/QRDUserView.h" />
         <source-file src="src/ios/QRDUserView.m" />
-        
-		<resource-file src="src/ios/rtc-qiniu.bundle"/>
 
-        <framework src="src/ios/libs/QNRTCKit.framework" embed="true" custom="true" />
+        <header-file src="src/ios/ViewTools/QRDJoinRoomView.h" target-dir="ViewTools" />
+        <source-file src="src/ios/ViewTools/QRDJoinRoomView.m" target-dir="ViewTools" />
+        <header-file src="src/ios/ViewTools/QRDMergeInfo.h" target-dir="ViewTools" />
+        <source-file src="src/ios/ViewTools/QRDMergeInfo.m" target-dir="ViewTools" />
+        <header-file src="src/ios/ViewTools/QRDSettingView.h" target-dir="ViewTools" />
+        <source-file src="src/ios/ViewTools/QRDSettingView.m" target-dir="ViewTools" />
+        <header-file src="src/ios/ViewTools/QRDUserNameView.h" target-dir="ViewTools" />
+        <source-file src="src/ios/ViewTools/QRDUserNameView.m" target-dir="ViewTools" />
+        <header-file src="src/ios/ViewTools/UIView+Alert.h" target-dir="ViewTools" />
+        <source-file src="src/ios/ViewTools/UIView+Alert.m" target-dir="ViewTools" />
+        
+				<resource-file src="src/ios/ViewTools/camera-switch-end@2x.png" />
+				<resource-file src="src/ios/ViewTools/camera-switch-end@3x.png" />
+				<resource-file src="src/ios/ViewTools/camera-switch-front@2x.png" />
+				<resource-file src="src/ios/ViewTools/camera-switch-front@3x.png" />
+				<resource-file src="src/ios/ViewTools/choose@2x.png" />
+				<resource-file src="src/ios/ViewTools/choose@3x.png" />
+				<resource-file src="src/ios/ViewTools/close-phone@2x.png" />
+				<resource-file src="src/ios/ViewTools/close-phone@3x.png" />
+				<resource-file src="src/ios/ViewTools/down_up@2x.png" />
+				<resource-file src="src/ios/ViewTools/down_up@3x.png" />
+				<resource-file src="src/ios/ViewTools/face-beauty-close@2x.png" />
+				<resource-file src="src/ios/ViewTools/face-beauty-close@3x.png" />
+				<resource-file src="src/ios/ViewTools/face-beauty-open@2x.png" />
+				<resource-file src="src/ios/ViewTools/face-beauty-open@3x.png" />
+				<resource-file src="src/ios/ViewTools/live_setting@2x.png" />
+				<resource-file src="src/ios/ViewTools/live_setting@3x.png" />
+				<resource-file src="src/ios/ViewTools/log-btn@2x.png" />
+				<resource-file src="src/ios/ViewTools/log-btn@3x.png" />
+				<resource-file src="src/ios/ViewTools/loudspeaker-disable@2x.png" />
+				<resource-file src="src/ios/ViewTools/loudspeaker-disable@3x.png" />
+				<resource-file src="src/ios/ViewTools/loudspeaker@2x.png" />
+				<resource-file src="src/ios/ViewTools/loudspeaker@3x.png" />
+				<resource-file src="src/ios/ViewTools/menu_sel@2x.png" />
+				<resource-file src="src/ios/ViewTools/menu_sel@3x.png" />
+				<resource-file src="src/ios/ViewTools/microphone-disable@2x.png" />
+				<resource-file src="src/ios/ViewTools/microphone-disable@3x.png" />
+				<resource-file src="src/ios/ViewTools/microphone@2x.png" />
+				<resource-file src="src/ios/ViewTools/microphone@3x.png" />
+				<resource-file src="src/ios/ViewTools/noChoose@2x.png" />
+				<resource-file src="src/ios/ViewTools/noChoose@3x.png" />
+				<resource-file src="src/ios/ViewTools/set_back@2x.png" />
+				<resource-file src="src/ios/ViewTools/set_back@3x.png" />
+				<resource-file src="src/ios/ViewTools/setting@2x.png" />
+				<resource-file src="src/ios/ViewTools/setting@3x.png" />
+				<resource-file src="src/ios/ViewTools/un_mute_audio@2x.png" />
+				<resource-file src="src/ios/ViewTools/un_mute_audio@3x.png" />
+				<resource-file src="src/ios/ViewTools/up_down@2x.png" />
+				<resource-file src="src/ios/ViewTools/up_down@3x.png" />
+				<resource-file src="src/ios/ViewTools/video-close@2x.png" />
+				<resource-file src="src/ios/ViewTools/video-close@3x.png" />
+				<resource-file src="src/ios/ViewTools/video-open@2x.png" />
+				<resource-file src="src/ios/ViewTools/video-open@3x.png" />
+
         <framework src="UIKit" />
         <framework src="AVFoundation" />
         <framework src="CoreGraphics" />
@@ -191,9 +258,22 @@
         <framework src="AudioToolbox" />
         <framework src="CoreMedia" />
         <framework src="VideoToolbox" />
-<!--
-        <framework src="QNRTCKit" type="podspec" spec="~> 1.2" />
--->
+        
+        <framework src="src/ios/libs/QNRTCKit.framework" embed="true" custom="true" />
+        
+        <podspec>
+            <config>
+                <source url="https://github.com/CocoaPods/Specs.git"/>
+            </config>
+            <pods>
+                <pod name="Bugsnag" spec="~> 5.15.4" />
+                <pod name="PLPlayerKit" spec="~> 3.4.1" />
+                <pod name="MMMaterialDesignSpinner" spec="~> 0.2.5" />
+                <pod name="JGProgressHUD" spec="~> 2.0.3" />
+                <pod name="Masonry" spec="~> 1.1.0" />
+            </pods>
+        </podspec>
+        
     </platform>
 
 </plugin>

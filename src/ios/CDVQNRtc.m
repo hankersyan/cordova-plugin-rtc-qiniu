@@ -37,12 +37,8 @@
         rtcVC.userId = [param objectForKey:@"user_id"];
         rtcVC.roomToken = [param objectForKey:@"room_token"];
         rtcVC.appId = [param objectForKey:@"app_id"];
-//        rtcVC.roomName = @"mh008";
-//        rtcVC.userId = @"iPhone-for-03";
-//        rtcVC.appId = @"d8lk7l4ed"; // dmqotunph
         rtcVC.configDic = configDic;
-        rtcVC.videoEnabled = YES;
-//        [self.viewController.navigationController pushViewController:rtcVC animated:YES];
+//        rtcVC.videoEnabled = YES;
         
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             [self presentVC:rtcVC animated:YES completion:nil];
@@ -57,7 +53,9 @@
         [nav pushViewController:vc animated:YES];
     } else {
         UINavigationController *nav2 = [[UINavigationController alloc] initWithRootViewController:vc];
+        nav2.navigationBarHidden = YES;
         nav2.modalPresentationStyle = UIModalPresentationFullScreen;
+        //[nav2 setModalPresentationStyle: UIModalPresentationCustom];
         [_window.rootViewController presentViewController:nav2 animated:YES completion:nil];// presentModalViewController
     }
 }
