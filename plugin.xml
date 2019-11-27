@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<plugin id="cordova-plugin-rtc-qiniu" version="1.0.0" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+<plugin id="cordova-plugin-rtc-qiniu" version="1.0.1" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
     <name>cordova-plugin-rtc-qiniu</name>
     <preference name="APPID" />
     <js-module name="cordova-plugin-rtc-qiniu" src="www/qnrtc.js">
@@ -44,10 +44,6 @@
         <source-file src="src/android/utils/UpdateApkFileProvider.java" target-dir="src/cordova/plugin/qnrtc/utils" />
         <source-file src="src/android/utils/Utils.java" target-dir="src/cordova/plugin/qnrtc/utils" />
         <source-file src="src/android/utils/QNAppServer.java" target-dir="src/cordova/plugin/qnrtc/utils" />
-
-		<edit-config file="AndroidManifest.xml" target="/manifest/uses-sdk" mode="merge">
-			<uses-sdk android:minSdkVersion="17" />
-		</edit-config>
 
         <framework src="com.android.support:appcompat-v7:25.4.0"/>
 

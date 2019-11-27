@@ -3,3 +3,5 @@
 npm-debug.log
 example/demo/platforms
 example/demo/plugins
+example/demo/
+example/demo*/

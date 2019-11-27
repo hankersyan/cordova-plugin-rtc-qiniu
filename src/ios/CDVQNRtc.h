@@ -7,6 +7,8 @@
 
 @interface CDVQNRtc : CDVPlugin
 
+@property (strong, nonatomic) UIWindow *window;
+
 - (void)start:(CDVInvokedUrlCommand *)command;
 
 @end

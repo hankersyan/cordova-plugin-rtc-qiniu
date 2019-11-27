@@ -17,6 +17,7 @@
 #pragma mark "API"
 
 - (void)pluginInitialize {
+    [self retrieveMainWindow];
     
     [self initCompleteBlock];
 }
@@ -43,12 +44,35 @@
         rtcVC.videoEnabled = YES;
 //        [self.viewController.navigationController pushViewController:rtcVC animated:YES];
         
-        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:rtcVC];
-
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            [self.viewController presentViewController:nav animated:YES completion:nil];
+            [self presentVC:rtcVC animated:YES completion:nil];
         }];
     }];
+}
+
+- (void)presentVC:(UIViewController *)vc animated:(BOOL)animated completion:(void (^)(void))completion
+{
+    if ([_window.rootViewController isKindOfClass:[UINavigationController class]]) {
+        UINavigationController *nav = (UINavigationController*)_window.rootViewController;
+        [nav pushViewController:vc animated:YES];
+    } else {
+        UINavigationController *nav2 = [[UINavigationController alloc] initWithRootViewController:vc];
+        nav2.modalPresentationStyle = UIModalPresentationFullScreen;
+        [_window.rootViewController presentViewController:nav2 animated:YES completion:nil];// presentModalViewController
+    }
+}
+
+- (void)retrieveMainWindow {
+    self.window = [[[UIApplication sharedApplication] delegate] window];
+    if (!self.window) {
+        // for iOS13
+        for (UIWindow *window in [UIApplication sharedApplication].windows) {
+            if (window.isKeyWindow) {
+                self.window = window;
+                break;
+            }
+        }
+    }
 }
 
 - (void)initCompleteBlock {
