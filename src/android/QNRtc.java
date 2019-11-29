@@ -4,12 +4,10 @@ import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaArgs;
-import org.apache.cordova.PluginResult;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import android.Manifest;
@@ -18,13 +16,10 @@ import android.app.Application;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
-import android.net.Uri;
-import android.os.Build;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.provider.Settings;
-import android.telecom.Call;
 
 import cordova.plugin.qnrtc.activity.RoomActivity;
 import cordova.plugin.qnrtc.utils.ToastUtils;

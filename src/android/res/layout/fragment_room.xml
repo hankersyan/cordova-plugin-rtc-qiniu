@@ -22,28 +22,36 @@
         android:alpha="0.5"
         android:layout_alignStart="@id/log_shown_button"
         android:layout_below="@id/log_shown_button"
-        android:background="#49494B"
+        android:background="@color/editTextBackground"
         android:visibility="gone">
         <TextView
-            android:id="@+id/local_log_text"
+            android:id="@+id/local_log_text_video"
             android:layout_width="match_parent"
-            android:layout_height="140dp"
+            android:layout_height="wrap_content"
             android:padding="8dp"
             android:scrollbars="vertical"
             android:fadeScrollbars="false"
-            android:textColor="#ffffff" />
+            android:textColor="@color/white" />
+        <TextView
+            android:id="@+id/local_log_text_audio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:scrollbars="vertical"
+            android:fadeScrollbars="false"
+            android:textColor="@color/white" />
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:background="#ff0000" />
+            android:background="@color/red" />
         <TextView
             android:id="@+id/remote_log_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="8dp"
-            android:textColor="#ffffff"
+            android:textColor="@color/white"
             android:scrollbars="vertical"
             android:fadeScrollbars="false"
             android:maxHeight="200dp"/>
@@ -118,7 +126,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:format="%s"
-        android:textColor="#ffffff"
+        android:textColor="@color/white"
         android:layout_marginBottom="24dp"
         android:layout_centerHorizontal="true"
         android:layout_above="@id/bottom_button_layout" />

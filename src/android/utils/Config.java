@@ -1,5 +1,7 @@
 package cordova.plugin.qnrtc.utils;
 
+import java.util.regex.Pattern;
+
 public class Config {
     public static final String ROOM_NAME_RULE = "^[a-zA-Z0-9_-]{3,64}$";
     public static final String USER_NAME_RULE = "^[a-zA-Z0-9_-]{3,50}$";
@@ -19,24 +21,43 @@ public class Config {
     public static final String CODEC_MODE = "encodeMode";
     public static final String CAPTURE_MODE = "captureMode";
     public static final String BITRATE = "bitrate";
+    public static final String MAINTAIN_RES = "maintainRes";
 
     public static final int HW = 0;
     public static final int SW = 1;
     public static final int CAMERA_CAPTURE = 0;
     public static final int SCREEN_CAPTURE = 1;
     public static final int ONLY_AUDIO_CAPTURE = 2;
+    public static final int MUTI_TRACK_CAPTURE = 3;
 
-    public static final int [][] DEFAULT_RESOLUTION = {
+    public static final int[][] DEFAULT_RESOLUTION = {
             {352, 288},
             {640, 480},
-            {960, 540},
+            {960, 544},
             {1280, 720}
     };
 
-    public static int [] DEFAULT_FPS = {
-            20,
-            20,
-            20,
+    public static int[] DEFAULT_FPS = {
+            15,
+            15,
+            15,
             20
     };
+
+    public static int[] DEFAULT_BITRATE = {
+            300 * 1000,
+            400 * 1000,
+            700 * 1000,
+            1000 * 1000
+    };
+
+    public static boolean isUserNameOk(String userName) {
+        Pattern pattern = Pattern.compile(Config.USER_NAME_RULE);
+        return pattern.matcher(userName).matches();
+    }
+
+    public static boolean isRoomNameOk(String roomName) {
+        Pattern pattern = Pattern.compile(Config.ROOM_NAME_RULE);
+        return pattern.matcher(roomName).matches();
+    }
 }

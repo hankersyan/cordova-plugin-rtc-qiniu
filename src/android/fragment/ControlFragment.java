@@ -13,7 +13,8 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import cordova.plugin.qnrtc.QNRtc;
+import com.qbox.QNRTCKitDemo.R;
+
 
 /**
  * Fragment for call control.
@@ -28,7 +29,8 @@ public class ControlFragment extends Fragment {
     private ImageButton mToggleVideoButton;
     private ImageButton mLogShownButton;
     private LinearLayout mLogView;
-    private TextView mLocalTextView;
+    private TextView mLocalTextViewForVideo;
+    private TextView mLocalTextViewForAudio;
     private TextView mRemoteTextView;
     private StringBuffer mRemoteLogText;
     private Chronometer mTimer;
@@ -67,21 +69,23 @@ public class ControlFragment extends Fragment {
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mControlView = inflater.inflate(QNRtc.getResourceId("fragment_room", "layout"), container, false);//R.layout.fragment_room
+        mControlView = inflater.inflate(R.layout.fragment_room, container, false);
 
-        mDisconnectButton = (ImageButton) mControlView.findViewById(QNRtc.getResourceId("disconnect_button", "id"));//R.id.disconnect_button
-        mCameraSwitchButton = (ImageButton) mControlView.findViewById(QNRtc.getResourceId("camera_switch_button", "id"));//R.id.camera_switch_button
-        mToggleBeautyButton = (ImageButton) mControlView.findViewById(QNRtc.getResourceId("beauty_button", "id"));//R.id.beauty_button
-        mToggleMuteButton = (ImageButton) mControlView.findViewById(QNRtc.getResourceId("microphone_button", "id"));//R.id.microphone_button
-        mToggleSpeakerButton = (ImageButton) mControlView.findViewById(QNRtc.getResourceId("speaker_button", "id"));//R.id.speaker_button
-        mToggleVideoButton = (ImageButton) mControlView.findViewById(QNRtc.getResourceId("camera_button", "id"));//R.id.camera_button
-        mLogShownButton = (ImageButton) mControlView.findViewById(QNRtc.getResourceId("log_shown_button", "id"));//R.id.log_shown_button
-        mLogView = (LinearLayout) mControlView.findViewById(QNRtc.getResourceId("log_text", "id"));//R.id.log_text
-        mLocalTextView = (TextView) mControlView.findViewById(QNRtc.getResourceId("local_log_text", "id"));//R.id.local_log_text
-        mLocalTextView.setMovementMethod(ScrollingMovementMethod.getInstance());
-        mRemoteTextView = (TextView) mControlView.findViewById(QNRtc.getResourceId("remote_log_text", "id"));//R.id.remote_log_text
+        mDisconnectButton = (ImageButton) mControlView.findViewById(R.id.disconnect_button);
+        mCameraSwitchButton = (ImageButton) mControlView.findViewById(R.id.camera_switch_button);
+        mToggleBeautyButton = (ImageButton) mControlView.findViewById(R.id.beauty_button);
+        mToggleMuteButton = (ImageButton) mControlView.findViewById(R.id.microphone_button);
+        mToggleSpeakerButton = (ImageButton) mControlView.findViewById(R.id.speaker_button);
+        mToggleVideoButton = (ImageButton) mControlView.findViewById(R.id.camera_button);
+        mLogShownButton = (ImageButton) mControlView.findViewById(R.id.log_shown_button);
+        mLogView = (LinearLayout) mControlView.findViewById(R.id.log_text);
+        mLocalTextViewForVideo = (TextView) mControlView.findViewById(R.id.local_log_text_video);
+        mLocalTextViewForVideo.setMovementMethod(ScrollingMovementMethod.getInstance());
+        mLocalTextViewForAudio = (TextView) mControlView.findViewById(R.id.local_log_text_audio);
+        mLocalTextViewForAudio.setMovementMethod(ScrollingMovementMethod.getInstance());
+        mRemoteTextView = (TextView) mControlView.findViewById(R.id.remote_log_text);
         mRemoteTextView.setMovementMethod(ScrollingMovementMethod.getInstance());
-        mTimer = (Chronometer) mControlView.findViewById(QNRtc.getResourceId("timer", "id"));//R.id.timer
+        mTimer = (Chronometer) mControlView.findViewById(R.id.timer);
 
         mDisconnectButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,11 +108,7 @@ public class ControlFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     boolean enabled = mCallEvents.onToggleBeauty();
-                    mToggleBeautyButton.setImageResource(enabled ?
-                            QNRtc.getResourceId("face_beauty_open", "mipmap") //R.mipmap.face_beauty_open
-                            :
-                            QNRtc.getResourceId("face_beauty_close", "mipmap") //R.mipmap.face_beauty_close
-                    );
+                    mToggleBeautyButton.setImageResource(enabled ? R.mipmap.face_beauty_open : R.mipmap.face_beauty_close);
                 }
             });
         }
@@ -117,26 +117,18 @@ public class ControlFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 boolean enabled = mCallEvents.onToggleMic();
-                mToggleMuteButton.setImageResource(enabled ?
-                        QNRtc.getResourceId("microphone", "mipmap")//R.mipmap.microphone
-                        :
-                        QNRtc.getResourceId("microphone_disable", "mipmap")//R.mipmap.microphone_disable
-                );
+                mToggleMuteButton.setImageResource(enabled ? R.mipmap.microphone : R.mipmap.microphone_disable);
             }
         });
 
         if (mIsScreenCaptureEnabled || mIsAudioOnly) {
-            mToggleVideoButton.setImageResource(QNRtc.getResourceId("video_close", "mipmap"));//R.mipmap.video_close
+            mToggleVideoButton.setImageResource(R.mipmap.video_close);
         } else {
             mToggleVideoButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     boolean enabled = mCallEvents.onToggleVideo();
-                    mToggleVideoButton.setImageResource(enabled ?
-                            QNRtc.getResourceId("video_open", "mipmap")//R.mipmap.video_open
-                            :
-                            QNRtc.getResourceId("video_close", "mipmap")//R.mipmap.video_close
-                    );
+                    mToggleVideoButton.setImageResource(enabled ? R.mipmap.video_open : R.mipmap.video_close);
                 }
             });
         }
@@ -145,11 +137,7 @@ public class ControlFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 boolean enabled = mCallEvents.onToggleSpeaker();
-                mToggleSpeakerButton.setImageResource(enabled ?
-                        QNRtc.getResourceId("loudspeaker", "mipmap")//R.mipmap.loudspeaker
-                        :
-                        QNRtc.getResourceId("loudspeaker_disable", "mipmap")//R.mipmap.loudspeaker_disable
-                );
+                mToggleSpeakerButton.setImageResource(enabled ? R.mipmap.loudspeaker : R.mipmap.loudspeaker_disable);
             }
         });
 
@@ -172,9 +160,15 @@ public class ControlFragment extends Fragment {
         mTimer.stop();
     }
 
-    public void updateLocalLogText(String logText) {
+    public void updateLocalVideoLogText(String logText) {
         if (mLogView.getVisibility() == View.VISIBLE) {
-            mLocalTextView.setText(logText);
+            mLocalTextViewForVideo.setText(logText);
+        }
+    }
+
+    public void updateLocalAudioLogText(String logText) {
+        if (mLogView.getVisibility() == View.VISIBLE) {
+            mLocalTextViewForAudio.setText(logText);
         }
     }
 

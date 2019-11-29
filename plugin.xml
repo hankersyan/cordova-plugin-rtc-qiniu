@@ -33,32 +33,68 @@
         <!-- Plugin souce code -->
         <source-file src="src/android/QNRtc.java" target-dir="src/cordova/plugin/qnrtc" />
         <source-file src="src/android/activity/RoomActivity.java" target-dir="src/cordova/plugin/qnrtc/activity" />
+        <source-file src="src/android/activity/LiveRoomActivity.java" target-dir="src/cordova/plugin/qnrtc/activity" />
         <source-file src="src/android/fragment/ControlFragment.java" target-dir="src/cordova/plugin/qnrtc/fragment" />
+        <source-file src="src/android/model/RemoteTrack.java" target-dir="src/cordova/plugin/qnrtc/model" />
+        <source-file src="src/android/model/RemoteUser.java" target-dir="src/cordova/plugin/qnrtc/model" />
+        <source-file src="src/android/model/RemoteUserList.java" target-dir="src/cordova/plugin/qnrtc/model" />
+        <source-file src="src/android/ui/CircleTextView.java" target-dir="src/cordova/plugin/qnrtc/ui" />
         <source-file src="src/android/ui/LocalVideoView.java" target-dir="src/cordova/plugin/qnrtc/ui" />
+        <source-file src="src/android/ui/MergeLayoutConfigView.java" target-dir="src/cordova/plugin/qnrtc/ui" />
+        <source-file src="src/android/ui/RadioGroupFlow.java" target-dir="src/cordova/plugin/qnrtc/ui" />
         <source-file src="src/android/ui/RemoteVideoView.java" target-dir="src/cordova/plugin/qnrtc/ui" />
         <source-file src="src/android/ui/RTCVideoView.java" target-dir="src/cordova/plugin/qnrtc/ui" />
+        <source-file src="src/android/ui/UserTrackView.java" target-dir="src/cordova/plugin/qnrtc/ui" />
+        <source-file src="src/android/ui/UserTrackViewFullScreen.java" target-dir="src/cordova/plugin/qnrtc/ui" />
         <source-file src="src/android/utils/Config.java" target-dir="src/cordova/plugin/qnrtc/utils" />
-        <source-file src="src/android/utils/HttpConnection.java" target-dir="src/cordova/plugin/qnrtc/utils" />
-        <source-file src="src/android/utils/PermissionChecker.java" target-dir="src/cordova/plugin/qnrtc/utils" />
-        <source-file src="src/android/utils/ToastUtils.java" target-dir="src/cordova/plugin/qnrtc/utils" />
-        <source-file src="src/android/utils/UpdateApkFileProvider.java" target-dir="src/cordova/plugin/qnrtc/utils" />
-        <source-file src="src/android/utils/Utils.java" target-dir="src/cordova/plugin/qnrtc/utils" />
+        <source-file src="src/android/utils/MyHashMap.java" target-dir="src/cordova/plugin/qnrtc/utils" />
         <source-file src="src/android/utils/QNAppServer.java" target-dir="src/cordova/plugin/qnrtc/utils" />
+        <source-file src="src/android/utils/SplitUtils.java" target-dir="src/cordova/plugin/qnrtc/utils" />
+        <source-file src="src/android/utils/ToastUtils.java" target-dir="src/cordova/plugin/qnrtc/utils" />
+        <source-file src="src/android/utils/TrackWindowMgr.java" target-dir="src/cordova/plugin/qnrtc/utils" />
 
-        <framework src="com.android.support:appcompat-v7:25.4.0"/>
+        <framework src="com.android.support:appcompat-v7:28.0.0"/>
+        <framework src="com.android.support:recyclerview-v7:28.0.0"/>
+        <framework src="com.android.support.constraint:constraint-layout:1.1.3"/>
 
         <!-- sdk -->
-        <source-file src="src/android/libs/qndroid-rtc-1.2.0.jar" target-dir="app/libs"/>
-        <resource-file src="src/android/libs/armeabi-v7a/libqndroid_rtc.so" target="jniLibs/armeabi-v7a/libqndroid_rtc.so"/>
+        <source-file src="src/android/libs/qndroid-rtc-2.3.0.jar" target-dir="app/libs"/>
+        <source-file src="src/android/libs/pldroid-player-2.1.4.jar" target-dir="app/libs"/>
+
+        <resource-file src="src/android/libs/armeabi-v7a/libqcCodec.so" target="jniLibs/armeabi-v7a/libqcCodec.so"/>
+        <resource-file src="src/android/libs/armeabi-v7a/libqcOpenSSL.so" target="jniLibs/armeabi-v7a/libqcOpenSSL.so"/>
+        <resource-file src="src/android/libs/armeabi-v7a/libqndroid_amix.so" target="jniLibs/armeabi-v7a/libqndroid_amix.so"/>
         <resource-file src="src/android/libs/armeabi-v7a/libqndroid_beauty.so" target="jniLibs/armeabi-v7a/libqndroid_beauty.so"/>
+        <resource-file src="src/android/libs/armeabi-v7a/libqndroid_rtc.so" target="jniLibs/armeabi-v7a/libqndroid_rtc.so"/>
+        <resource-file src="src/android/libs/armeabi-v7a/libQPlayer.so" target="jniLibs/armeabi-v7a/libQPlayer.so"/>
 
+        <resource-file src="src/android/libs/arm64-v8a/libqcCodec.so" target="jniLibs/arm64-v8a/libqcCodec.so"/>
+        <resource-file src="src/android/libs/arm64-v8a/libqcOpenSSL.so" target="jniLibs/arm64-v8a/libqcOpenSSL.so"/>
+        <resource-file src="src/android/libs/arm64-v8a/libqndroid_amix.so" target="jniLibs/arm64-v8a/libqndroid_amix.so"/>
+        <resource-file src="src/android/libs/arm64-v8a/libqndroid_beauty.so" target="jniLibs/arm64-v8a/libqndroid_beauty.so"/>
+        <resource-file src="src/android/libs/arm64-v8a/libqndroid_rtc.so" target="jniLibs/arm64-v8a/libqndroid_rtc.so"/>
+        <resource-file src="src/android/libs/arm64-v8a/libQPlayer.so" target="jniLibs/arm64-v8a/libQPlayer.so"/>
+
+		<resource-file src="src/android/res/drawable/btn_config.xml" target="res/drawable/btn_config.xml" />
 		<resource-file src="src/android/res/drawable/microphone_state_enable.xml" target="res/drawable/microphone_state_enable.xml" />
-		<resource-file src="src/android/res/drawable-hdpi/disconnect.png" target="res/drawable-hdpi/disconnect.png" />
+		<resource-file src="src/android/res/drawable/white_background.xml" target="res/drawable/white_background.xml" />
 
+		<resource-file src="src/android/res/drawable-hdpi/disconnect.png" target="res/drawable-hdpi/disconnect.png" />
+		<resource-file src="src/android/res/drawable-hdpi/oval_btn_background.xml" target="res/drawable-hdpi/oval_btn_background.xml" />
+		<resource-file src="src/android/res/drawable-hdpi/oval_edit_text_background.xml" target="res/drawable-hdpi/oval_edit_text_background.xml" />
+
+		<resource-file src="src/android/res/layout/activity_live_room.xml" target="res/layout/activity_live_room.xml" />
+		<resource-file src="src/android/res/layout/activity_muti_track_room.xml" target="res/layout/activity_muti_track_room.xml" />
 		<resource-file src="src/android/res/layout/activity_room.xml" target="res/layout/activity_room.xml" />
 		<resource-file src="src/android/res/layout/fragment_room.xml" target="res/layout/fragment_room.xml" />
+		<resource-file src="src/android/res/layout/item_user.xml" target="res/layout/item_user.xml" />
+		<resource-file src="src/android/res/layout/layout_config_view.xml" target="res/layout/layout_config_view.xml" />
 		<resource-file src="src/android/res/layout/local_video_view.xml" target="res/layout/local_video_view.xml" />
 		<resource-file src="src/android/res/layout/remote_video_view.xml" target="res/layout/remote_video_view.xml" />
+		<resource-file src="src/android/res/layout/track_local_view.xml" target="res/layout/track_local_view.xml" />
+		<resource-file src="src/android/res/layout/track_remote_view.xml" target="res/layout/track_remote_view.xml" />
+		<resource-file src="src/android/res/layout/user_tracks_view_full_screen.xml" target="res/layout/user_tracks_view_full_screen.xml" />
+		<resource-file src="src/android/res/layout/user_tracks_view.xml" target="res/layout/user_tracks_view.xml" />
 
 		<resource-file src="src/android/res/mipmap-hdpi/back.png" target="res/mipmap-hdpi/back.png" />
 		<resource-file src="src/android/res/mipmap-hdpi/camera_switch_end.png" target="res/mipmap-hdpi/camera_switch_end.png" />
@@ -67,7 +103,6 @@
 		<resource-file src="src/android/res/mipmap-hdpi/copy.png" target="res/mipmap-hdpi/copy.png" />
 		<resource-file src="src/android/res/mipmap-hdpi/face_beauty_close.png" target="res/mipmap-hdpi/face_beauty_close.png" />
 		<resource-file src="src/android/res/mipmap-hdpi/face_beauty_open.png" target="res/mipmap-hdpi/face_beauty_open.png" />
-		<resource-file src="src/android/res/mipmap-hdpi/icon_arrow_down.png" target="res/mipmap-hdpi/icon_arrow_down.png" />
 		<resource-file src="src/android/res/mipmap-hdpi/log_btn.png" target="res/mipmap-hdpi/log_btn.png" />
 		<resource-file src="src/android/res/mipmap-hdpi/loudspeaker_disable.png" target="res/mipmap-hdpi/loudspeaker_disable.png" />
 		<resource-file src="src/android/res/mipmap-hdpi/loudspeaker.png" target="res/mipmap-hdpi/loudspeaker.png" />
@@ -151,6 +186,8 @@
 		<resource-file src="src/android/res/mipmap-xxxhdpi/video_close.png" target="res/mipmap-xxxhdpi/video_close.png" />
 		<resource-file src="src/android/res/mipmap-xxxhdpi/video_open.png" target="res/mipmap-xxxhdpi/video_open.png" />
 
+		<resource-file src="src/android/res/values/qnrtc-array.xml" target="res/values/qnrtc-array.xml" />
+		<resource-file src="src/android/res/values/qnrtc-attrs.xml" target="res/values/qnrtc-attrs.xml" />
 		<resource-file src="src/android/res/values/qnrtc-colors.xml" target="res/values/qnrtc-colors.xml" />
 		<resource-file src="src/android/res/values/qnrtc-strings.xml" target="res/values/qnrtc-strings.xml" />
 		
