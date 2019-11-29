@@ -49,7 +49,7 @@ oReq.send();
 
 #### XCode
 
-1. add "#import "Plugins/cordova-plugin-rtc-qiniu/QRDPublicHeader.h" to <YOUR-PROJECT>-Prefex.pch
+1. add "#import "Plugins/cordova-plugin-rtc-qiniu/QRDPublicHeader.h" to YOUR_PROJECT_NAME-Prefix.pch
 
 # Example
 At first you need install npm/cordova.
