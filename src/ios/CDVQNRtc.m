@@ -52,11 +52,11 @@
         UINavigationController *nav = (UINavigationController*)_window.rootViewController;
         [nav pushViewController:vc animated:YES];
     } else {
+        UIViewController* topVC = [CDVQNRtc topMostController];
         UINavigationController *nav2 = [[UINavigationController alloc] initWithRootViewController:vc];
         nav2.navigationBarHidden = YES;
         nav2.modalPresentationStyle = UIModalPresentationFullScreen;
-        //[nav2 setModalPresentationStyle: UIModalPresentationCustom];
-        [_window.rootViewController presentViewController:nav2 animated:YES completion:nil];// presentModalViewController
+        [topVC presentViewController:nav2 animated:YES completion:nil];
     }
 }
 
@@ -71,6 +71,17 @@
             }
         }
     }
+}
+
++ (UIViewController*)topMostController
+{
+    UIViewController *topController = [UIApplication sharedApplication].keyWindow.rootViewController;
+
+    while (topController.presentedViewController) {
+        topController = topController.presentedViewController;
+    }
+
+    return topController;
 }
 
 - (void)initCompleteBlock {
