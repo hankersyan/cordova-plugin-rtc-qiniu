@@ -14,7 +14,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.qbox.QNRTCKitDemo.R;
 import com.qiniu.droid.rtc.QNRTCEngine;
 import com.qiniu.droid.rtc.QNSurfaceView;
 import com.qiniu.droid.rtc.QNTrackInfo;
@@ -25,6 +24,8 @@ import org.webrtc.RendererCommon;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
+import cordova.plugin.qnrtc.QNRtc;
 
 public class UserTrackView extends FrameLayout {
 
@@ -76,7 +77,7 @@ public class UserTrackView extends FrameLayout {
     }
 
     protected int getLayout() {
-        return R.layout.user_tracks_view;
+        return QNRtc.getResourceId("user_tracks_view", "layout");
     }
 
     public String getUserId() {
@@ -351,21 +352,21 @@ public class UserTrackView extends FrameLayout {
     }
 
     private void updateMicrophoneStateView(boolean isMute) {
-        mMicrophoneStateView.setImageResource(isMute ? R.mipmap.microphone_disable : R.drawable.microphone_state_enable);
+        mMicrophoneStateView.setImageResource(isMute ? QNRtc.getResourceId("microphone_disable", "mipmap") : QNRtc.getResourceId("microphone_state_enable", "drawable"));
     }
 
     @SuppressWarnings("all")
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        mVideoViewLargeParent = findViewById(R.id.qn_surface_view_large_parent);
-        mSurfaceViewLarge = (QNSurfaceView) findViewById(R.id.qn_surface_view_large);
+        mVideoViewLargeParent = findViewById(QNRtc.getResourceId("qn_surface_view_large_parent", "id"));
+        mSurfaceViewLarge = (QNSurfaceView) findViewById(QNRtc.getResourceId("qn_surface_view_large", "id"));
 
-        mVideoViewSmallParent = findViewById(R.id.qn_surface_view_small_parent);
-        mSurfaceViewSmall = (QNSurfaceView) findViewById(R.id.qn_surface_view_small);
+        mVideoViewSmallParent = findViewById(QNRtc.getResourceId("qn_surface_view_small_parent", "id"));
+        mSurfaceViewSmall = (QNSurfaceView) findViewById(QNRtc.getResourceId("qn_surface_view_small", "id"));
 
-        mMicrophoneStateView = (ImageView) findViewById(R.id.microphone_state_view);
-        mAudioView = (TextView) findViewById(R.id.qn_audio_view);
+        mMicrophoneStateView = (ImageView) findViewById(QNRtc.getResourceId("microphone_state_view", "id"));
+        mAudioView = (TextView) findViewById(QNRtc.getResourceId("qn_audio_view", "id"));
     }
 
     @Override
@@ -385,7 +386,7 @@ public class UserTrackView extends FrameLayout {
     }
 
     private int getTargetColor(int pos) {
-        int[] customizedColors = getContext().getResources().getIntArray(R.array.audioBackgroundColors);
+        int[] customizedColors = getContext().getResources().getIntArray(QNRtc.getResourceId("audioBackgroundColors", "array"));
         return customizedColors[pos % 6];
     }
 

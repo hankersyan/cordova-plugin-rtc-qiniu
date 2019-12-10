@@ -8,7 +8,7 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 
-import com.qbox.QNRTCKitDemo.R;
+import cordova.plugin.qnrtc.QNRtc;
 
 
 public class CircleTextView extends android.support.v7.widget.AppCompatTextView {
@@ -23,8 +23,8 @@ public class CircleTextView extends android.support.v7.widget.AppCompatTextView 
 
     public CircleTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.CircleTextView);
-        mColor = typedArray.getColor(R.styleable.CircleTextView_circle_color,Color.parseColor("#588CEE"));
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, new int[] { QNRtc.getResourceId("CircleTextView", "styleable") } );
+        mColor = typedArray.getColor(QNRtc.getResourceId("CircleTextView_circle_color", "styleable"), Color.parseColor("#588CEE"));
         typedArray.recycle();
         init();
     }

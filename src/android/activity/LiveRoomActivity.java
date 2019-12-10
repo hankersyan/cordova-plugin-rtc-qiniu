@@ -31,7 +31,6 @@ import android.widget.Toast;
 import com.pili.pldroid.player.PLOnErrorListener;
 import com.pili.pldroid.player.PLOnInfoListener;
 import com.pili.pldroid.player.widget.PLVideoView;
-import com.qbox.QNRTCKitDemo.R;
 import com.qiniu.droid.rtc.QNCustomMessage;
 import com.qiniu.droid.rtc.QNRTCEngine;
 import com.qiniu.droid.rtc.QNRTCEngineEventListener;
@@ -44,6 +43,7 @@ import com.qiniu.droid.rtc.model.QNMergeTrackOption;
 import java.util.ArrayList;
 import java.util.List;
 
+import cordova.plugin.qnrtc.QNRtc;
 import cordova.plugin.qnrtc.model.RemoteTrack;
 import cordova.plugin.qnrtc.model.RemoteUser;
 import cordova.plugin.qnrtc.model.RemoteUserList;
@@ -96,29 +96,29 @@ public class LiveRoomActivity extends Activity implements QNRTCEngineEventListen
                 | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
                 | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
         getWindow().getDecorView().setSystemUiVisibility(getSystemUiVisibility());
-        setContentView(R.layout.activity_live_room);
+        setContentView(QNRtc.getResourceId("activity_live_room", "layout"));
 
         Intent intent = getIntent();
         String mRtmpUrl = BASE_URL + intent.getStringExtra(EXTRA_ROOM_ID);
         mToken = intent.getStringExtra(EXTRA_ROOM_TOKEN);
         mUserName = intent.getStringExtra(EXTRA_USER_ID);
 
-        mTimer = (Chronometer) findViewById(R.id.timer);
-        mLogView = (LinearLayout) findViewById(R.id.log_text);
-        ImageButton mLogButton = (ImageButton) findViewById(R.id.log_shown_button);
+        mTimer = (Chronometer) findViewById(QNRtc.getResourceId("timer", "id"));
+        mLogView = (LinearLayout) findViewById(QNRtc.getResourceId("log_text", "id"));
+        ImageButton mLogButton = (ImageButton) findViewById(QNRtc.getResourceId("log_shown_button", "id"));
         mLogButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mLogView.setVisibility(mLogView.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
             }
         });
-        mAudioBitrateText = (TextView) findViewById(R.id.audio_bitrate_log_text);
-        mAudioFpsText = (TextView) findViewById(R.id.audio_fps_log_text);
-        mVideoBitrateText = (TextView) findViewById(R.id.video_bitrate_log_text);
-        mVideoFpsText = (TextView) findViewById(R.id.video_fps_log_text);
-        mRemoteTextView = (TextView) findViewById(R.id.remote_log_text);
+        mAudioBitrateText = (TextView) findViewById(QNRtc.getResourceId("audio_bitrate_log_text", "id"));
+        mAudioFpsText = (TextView) findViewById(QNRtc.getResourceId("audio_fps_log_text", "id"));
+        mVideoBitrateText = (TextView) findViewById(QNRtc.getResourceId("video_bitrate_log_text", "id"));
+        mVideoFpsText = (TextView) findViewById(QNRtc.getResourceId("video_fps_log_text", "id"));
+        mRemoteTextView = (TextView) findViewById(QNRtc.getResourceId("remote_log_text", "id"));
         mRemoteTextView.setMovementMethod(ScrollingMovementMethod.getInstance());
-        mVideoView = (PLVideoView) findViewById(R.id.PLVideoView);
+        mVideoView = (PLVideoView) findViewById(QNRtc.getResourceId("PLVideoView", "id"));
 
         mRemoteUserList = new RemoteUserList();
 
@@ -282,7 +282,7 @@ public class LiveRoomActivity extends Activity implements QNRTCEngineEventListen
                 mUserListAdapter.notifyDataSetChanged();
 
                 mPopWindow = new PopupWindow(mMergeLayoutConfigView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
-                mPopWindow.setBackgroundDrawable(new ColorDrawable(ContextCompat.getColor(this, R.color.popupWindowBackground)));
+                mPopWindow.setBackgroundDrawable(new ColorDrawable(ContextCompat.getColor(this, QNRtc.getResourceId("popupWindowBackground", "color"))));
                 mPopWindow.showAtLocation(getWindow().getDecorView().getRootView(), Gravity.BOTTOM, 0, 0);
             }
         } else {
@@ -318,7 +318,7 @@ public class LiveRoomActivity extends Activity implements QNRTCEngineEventListen
                 showErrorDialog("找不到会议直播，请确认该房间是否有其他用户发布流。");
             } else {
                 mVideoView.start();
-                logAndToast(getString(R.string.connected_to_room));
+                logAndToast(getString(QNRtc.getResourceId("connected_to_room", "string")));
             }
         }
     }
@@ -422,7 +422,7 @@ public class LiveRoomActivity extends Activity implements QNRTCEngineEventListen
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new ViewHolder(LayoutInflater.from(getApplicationContext()).inflate(R.layout.item_user, parent, false));
+            return new ViewHolder(LayoutInflater.from(getApplicationContext()).inflate(QNRtc.getResourceId("item_user", "layout"), parent, false));
         }
 
         @Override
@@ -432,7 +432,7 @@ public class LiveRoomActivity extends Activity implements QNRTCEngineEventListen
             holder.username.setText(userId);
             holder.username.setCircleColor(mColor[position % 4]);
             if (mChooseUser != null && mChooseUser.getUserId().equals(userId)) {
-                holder.itemView.setBackground(getResources().getDrawable(R.drawable.white_background));
+                holder.itemView.setBackground(getResources().getDrawable(QNRtc.getResourceId("white_background", "drawable")));
             } else {
                 holder.itemView.setBackgroundResource(0);
             }
@@ -457,7 +457,7 @@ public class LiveRoomActivity extends Activity implements QNRTCEngineEventListen
 
         private ViewHolder(View itemView) {
             super(itemView);
-            username = (CircleTextView) itemView.findViewById(R.id.user_name_text);
+            username = (CircleTextView) itemView.findViewById(QNRtc.getResourceId("user_name_text", "id"));
         }
     }
 
@@ -510,10 +510,10 @@ public class LiveRoomActivity extends Activity implements QNRTCEngineEventListen
             @Override
             public void run() {
                 new AlertDialog.Builder(LiveRoomActivity.this)
-                        .setTitle(getText(R.string.channel_error_title))
+                        .setTitle(getText(QNRtc.getResourceId("channel_error_title", "string")))
                         .setMessage(message)
                         .setCancelable(false)
-                        .setNeutralButton(R.string.positive_dialog_tips,
+                        .setNeutralButton(QNRtc.getResourceId("positive_dialog_tips", "string"),
                                 new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int id) {

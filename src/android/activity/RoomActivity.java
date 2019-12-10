@@ -18,7 +18,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-import com.qbox.QNRTCKitDemo.R;
 import com.qiniu.droid.rtc.QNBeautySetting;
 import com.qiniu.droid.rtc.QNCameraSwitchResultCallback;
 import com.qiniu.droid.rtc.QNCustomMessage;
@@ -41,6 +40,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import cordova.plugin.qnrtc.QNRtc;
 import cordova.plugin.qnrtc.fragment.ControlFragment;
 import cordova.plugin.qnrtc.ui.UserTrackView;
 import cordova.plugin.qnrtc.utils.Config;
@@ -112,7 +112,7 @@ public class RoomActivity extends Activity implements QNRTCEngineEventListener, 
         mScreenWidth = outMetrics.widthPixels;
         mScreenHeight = outMetrics.heightPixels;
 
-        setContentView(R.layout.activity_muti_track_room);
+        setContentView(QNRtc.getResourceId("activity_muti_track_room", "layout"));
 
         Intent intent = getIntent();
         mRoomToken = intent.getStringExtra(EXTRA_ROOM_TOKEN);
@@ -120,17 +120,17 @@ public class RoomActivity extends Activity implements QNRTCEngineEventListener, 
         mRoomId = intent.getStringExtra(EXTRA_ROOM_ID);
         mIsAdmin = mUserId.equals(QNAppServer.ADMIN_USER);
 
-        mTrackWindowFullScreen = (UserTrackView) findViewById(R.id.track_window_full_screen);
+        mTrackWindowFullScreen = (UserTrackView) findViewById(QNRtc.getResourceId("track_window_full_screen", "id"));
         mTrackWindowsList = new LinkedList<UserTrackView>(Arrays.asList(
-                (UserTrackView) findViewById(R.id.track_window_a),
-                (UserTrackView) findViewById(R.id.track_window_b),
-                (UserTrackView) findViewById(R.id.track_window_c),
-                (UserTrackView) findViewById(R.id.track_window_d),
-                (UserTrackView) findViewById(R.id.track_window_e),
-                (UserTrackView) findViewById(R.id.track_window_f),
-                (UserTrackView) findViewById(R.id.track_window_g),
-                (UserTrackView) findViewById(R.id.track_window_h),
-                (UserTrackView) findViewById(R.id.track_window_i)
+                (UserTrackView) findViewById(QNRtc.getResourceId("track_window_a", "id")),
+                (UserTrackView) findViewById(QNRtc.getResourceId("track_window_b", "id")),
+                (UserTrackView) findViewById(QNRtc.getResourceId("track_window_c", "id")),
+                (UserTrackView) findViewById(QNRtc.getResourceId("track_window_d", "id")),
+                (UserTrackView) findViewById(QNRtc.getResourceId("track_window_e", "id")),
+                (UserTrackView) findViewById(QNRtc.getResourceId("track_window_f", "id")),
+                (UserTrackView) findViewById(QNRtc.getResourceId("track_window_g", "id")),
+                (UserTrackView) findViewById(QNRtc.getResourceId("track_window_h", "id")),
+                (UserTrackView) findViewById(QNRtc.getResourceId("track_window_i", "id"))
         ));
 
         for (final UserTrackView view : mTrackWindowsList) {
@@ -149,7 +149,7 @@ public class RoomActivity extends Activity implements QNRTCEngineEventListener, 
         mControlFragment = new ControlFragment();
         mControlFragment.setArguments(intent.getExtras());
         FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.add(R.id.control_fragment_container, mControlFragment);
+        ft.add(QNRtc.getResourceId("control_fragment_container", "id"), mControlFragment);
         ft.commitAllowingStateLoss();
 
         // permission check
@@ -176,7 +176,7 @@ public class RoomActivity extends Activity implements QNRTCEngineEventListener, 
     }
 
     private void initQNRTCEngine() {
-        SharedPreferences preferences = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
+        SharedPreferences preferences = getSharedPreferences(getString(QNRtc.getResourceId("app_name", "string")), Context.MODE_PRIVATE);
         int videoWidth = preferences.getInt(Config.WIDTH, DEFAULT_RESOLUTION[1][0]);
         int videoHeight = preferences.getInt(Config.HEIGHT, DEFAULT_RESOLUTION[1][1]);
         int fps = preferences.getInt(Config.FPS, DEFAULT_FPS[1]);
@@ -186,7 +186,7 @@ public class RoomActivity extends Activity implements QNRTCEngineEventListener, 
         mCaptureMode = preferences.getInt(Config.CAPTURE_MODE, Config.CAMERA_CAPTURE);
 
         // get the items in hw black list, and set isHwCodec false forcibly
-        String[] hwBlackList = getResources().getStringArray(R.array.hw_black_list);
+        String[] hwBlackList = getResources().getStringArray(QNRtc.getResourceId("hw_black_list", "array"));
         mHWBlackList.addAll(Arrays.asList(hwBlackList));
         if (mHWBlackList.contains(Build.MODEL)) {
             isHwCodec = false;
@@ -291,10 +291,10 @@ public class RoomActivity extends Activity implements QNRTCEngineEventListener, 
 
     private void disconnectWithErrorMessage(final String errorMessage) {
         new AlertDialog.Builder(this)
-                .setTitle(getText(R.string.channel_error_title))
+                .setTitle(getText(QNRtc.getResourceId("channel_error_title", "string")))
                 .setMessage(errorMessage)
                 .setCancelable(false)
-                .setNeutralButton(R.string.positive_dialog_tips,
+                .setNeutralButton(QNRtc.getResourceId("positive_dialog_tips", "string"),
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int id) {
@@ -317,11 +317,11 @@ public class RoomActivity extends Activity implements QNRTCEngineEventListener, 
     private void showKickoutDialog(final String userId) {
         if (mKickOutDialog == null) {
             mKickOutDialog = new AlertDialog.Builder(this)
-                    .setNegativeButton(R.string.negative_dialog_tips, null)
+                    .setNegativeButton(QNRtc.getResourceId("negative_dialog_tips", "string"), null)
                     .create();
         }
-        mKickOutDialog.setMessage(getString(R.string.kickout_tips, userId));
-        mKickOutDialog.setButton(DialogInterface.BUTTON_POSITIVE, getResources().getString(R.string.positive_dialog_tips),
+        mKickOutDialog.setMessage(getString(QNRtc.getResourceId("kickout_tips", "string"), userId));
+        mKickOutDialog.setButton(DialogInterface.BUTTON_POSITIVE, getResources().getString(QNRtc.getResourceId("positive_dialog_tips", "string")),
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -350,21 +350,21 @@ public class RoomActivity extends Activity implements QNRTCEngineEventListener, 
         Log.i(TAG, "onRoomStateChanged:" + state.name());
         switch (state) {
             case RECONNECTING:
-                logAndToast(getString(R.string.reconnecting_to_room));
+                logAndToast(getString(QNRtc.getResourceId("reconnecting_to_room", "string")));
                 mControlFragment.stopTimer();
                 break;
             case CONNECTED:
                 mEngine.publishTracks(mLocalTrackList);
-                logAndToast(getString(R.string.connected_to_room));
+                logAndToast(getString(QNRtc.getResourceId("connected_to_room", "string")));
                 mIsJoinedRoom = true;
                 mControlFragment.startTimer();
                 break;
             case RECONNECTED:
-                logAndToast(getString(R.string.connected_to_room));
+                logAndToast(getString(QNRtc.getResourceId("connected_to_room", "string")));
                 mControlFragment.startTimer();
                 break;
             case CONNECTING:
-                logAndToast(getString(R.string.connecting_to, mRoomId));
+                logAndToast(getString(QNRtc.getResourceId("connecting_to", "string"), mRoomId));
                 break;
         }
     }
@@ -416,7 +416,7 @@ public class RoomActivity extends Activity implements QNRTCEngineEventListener, 
 
     @Override
     public void onKickedOut(String userId) {
-        ToastUtils.s(RoomActivity.this, getString(R.string.kicked_by_admin));
+        ToastUtils.s(RoomActivity.this, getString(QNRtc.getResourceId("kicked_by_admin", "string")));
         finish();
     }
 

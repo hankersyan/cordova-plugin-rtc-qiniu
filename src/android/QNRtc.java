@@ -7,6 +7,7 @@ import org.apache.cordova.CordovaArgs;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +21,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.provider.Settings;
+import android.util.Log;
 
 import cordova.plugin.qnrtc.activity.RoomActivity;
 import cordova.plugin.qnrtc.utils.ToastUtils;
@@ -27,8 +29,11 @@ import cordova.plugin.qnrtc.utils.ToastUtils;
 public class QNRtc extends CordovaPlugin {
 
     public static CordovaInterface _cordova = null;
+    static Application _app = null;
+    static String _packageName = null;
+    static Resources _resources = null;
 
-    public  Context context = null;
+    public Context context = null;
     // JS回掉接口对象
     public static CallbackContext cb = null;
     // 权限申请码
@@ -44,6 +49,9 @@ public class QNRtc extends CordovaPlugin {
     @Override
     protected void pluginInitialize() {
         _cordova = this.cordova;
+        _app = cordova.getActivity().getApplication();
+        _packageName = _app.getPackageName();
+        _resources = _app.getResources();
     }
 
     @Override
@@ -219,10 +227,42 @@ public class QNRtc extends CordovaPlugin {
     }
 
     public static int getResourceId(String name, String type) {
-        Application app = _cordova.getActivity().getApplication();
-        String package_name = app.getPackageName();
-        Resources resources = app.getResources();
-        int ic = resources.getIdentifier(name, type, package_name);
+        int ic = _resources.getIdentifier(name, type, _packageName);
         return ic;
     }
+
+    public static int getStringResIdByValue(String strVal)
+    {
+        // because string name can not be unicode
+        // R.string.class
+        try {
+            Class<?> act = Class.forName(_packageName + ".R");
+
+            Class stringCls = null;
+            for(Class innerClass: act.getDeclaredClasses())
+            {
+                if (innerClass.getName().endsWith("string")) {
+                    stringCls = innerClass;
+                    break;
+                }
+            }
+
+            if (stringCls != null) {
+                Field fields[] = stringCls.getFields();
+                for (Field field : fields) {
+                    int resId = _app.getResources().getIdentifier(field.getName(), "string", _packageName);
+                    String resVal = _app.getString(resId);
+                    if (resVal.equalsIgnoreCase(strVal)) {
+                        return resId;
+                    }
+                }
+            }
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
 }

@@ -13,13 +13,12 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.Switch;
 
-
-import com.qbox.QNRTCKitDemo.R;
 import com.qiniu.droid.rtc.model.QNMergeTrackOption;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import cordova.plugin.qnrtc.QNRtc;
 import cordova.plugin.qnrtc.model.RemoteTrack;
 import cordova.plugin.qnrtc.model.RemoteUser;
 import cordova.plugin.qnrtc.utils.ToastUtils;
@@ -70,32 +69,32 @@ public class MergeLayoutConfigView extends FrameLayout {
             return;
         }
         mInit = true;
-        View view = LayoutInflater.from(context).inflate(R.layout.layout_config_view, this, true);
+        View view = LayoutInflater.from(context).inflate(QNRtc.getResourceId("layout_config_view", "layout"), this, true);
         intView(view);
     }
 
     private void intView(View view) {
-        mUserListView = (RecyclerView) view.findViewById(R.id.user_list_view);
+        mUserListView = (RecyclerView) view.findViewById(QNRtc.getResourceId("user_list_view", "id"));
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         mUserListView.setLayoutManager(linearLayoutManager);
 
-        mFirstVideoSwitch = (Switch) view.findViewById(R.id.first_video_switch);
-        mFirstEditTextX = (EditText) view.findViewById(R.id.first_x_edit_text);
-        mFirstEditTextY = (EditText) view.findViewById(R.id.first_y_edit_text);
-        mFirstEditTextZ = (EditText) view.findViewById(R.id.first_z_edit_text);
-        mFirstEditTextWidth = (EditText) view.findViewById(R.id.first_width_edit_text);
-        mFirstEditTextHeight = (EditText) view.findViewById(R.id.first_height_edit_text);
+        mFirstVideoSwitch = (Switch) view.findViewById(QNRtc.getResourceId("first_video_switch", "id"));
+        mFirstEditTextX = (EditText) view.findViewById(QNRtc.getResourceId("first_x_edit_text", "id"));
+        mFirstEditTextY = (EditText) view.findViewById(QNRtc.getResourceId("first_y_edit_text", "id"));
+        mFirstEditTextZ = (EditText) view.findViewById(QNRtc.getResourceId("first_z_edit_text", "id"));
+        mFirstEditTextWidth = (EditText) view.findViewById(QNRtc.getResourceId("first_width_edit_text", "id"));
+        mFirstEditTextHeight = (EditText) view.findViewById(QNRtc.getResourceId("first_height_edit_text", "id"));
 
-        mSecondVideoSwitch = (Switch) view.findViewById(R.id.second_video_switch);
-        mSecondEditTextX = (EditText) view.findViewById(R.id.second_x_edit_text);
-        mSecondEditTextY = (EditText) view.findViewById(R.id.second_y_edit_text);
-        mSecondEditTextZ = (EditText) view.findViewById(R.id.second_z_edit_text);
-        mSecondEditTextWidth = (EditText) view.findViewById(R.id.second_width_edit_text);
-        mSecondEditTextHeight = (EditText) view.findViewById(R.id.second_height_edit_text);
+        mSecondVideoSwitch = (Switch) view.findViewById(QNRtc.getResourceId("second_video_switch", "id"));
+        mSecondEditTextX = (EditText) view.findViewById(QNRtc.getResourceId("second_x_edit_text", "id"));
+        mSecondEditTextY = (EditText) view.findViewById(QNRtc.getResourceId("second_y_edit_text", "id"));
+        mSecondEditTextZ = (EditText) view.findViewById(QNRtc.getResourceId("second_z_edit_text", "id"));
+        mSecondEditTextWidth = (EditText) view.findViewById(QNRtc.getResourceId("second_width_edit_text", "id"));
+        mSecondEditTextHeight = (EditText) view.findViewById(QNRtc.getResourceId("second_height_edit_text", "id"));
 
-        mAudioSwitch = (Switch) view.findViewById(R.id.audio_switch);
-        mBtnConfirm = (Button) view.findViewById(R.id.btn_confirm);
+        mAudioSwitch = (Switch) view.findViewById(QNRtc.getResourceId("audio_switch", "id"));
+        mBtnConfirm = (Button) view.findViewById(QNRtc.getResourceId("btn_confirm", "id"));
     }
 
     public RecyclerView getUserListView() {
@@ -158,12 +157,12 @@ public class MergeLayoutConfigView extends FrameLayout {
             QNMergeTrackOption option = mRemoteFirstVideoTrack.getQNMergeTrackOption();
             String videoTag = mRemoteFirstVideoTrack.getQNTrackInfo().getTag();
             if (UserTrackView.TAG_CAMERA.equals(videoTag)) {
-                mFirstVideoSwitch.setText(R.string.video_camera);
+                mFirstVideoSwitch.setText(QNRtc.getResourceId("video_camera", "string"));
             } else if (UserTrackView.TAG_SCREEN.equals(videoTag)) {
-                mFirstVideoSwitch.setText(R.string.video_screen);
+                mFirstVideoSwitch.setText(QNRtc.getResourceId("video_screen", "string"));
             } else {
                 if (TextUtils.isEmpty(videoTag)) {
-                    mFirstVideoSwitch.setText(R.string.video_camera);
+                    mFirstVideoSwitch.setText(QNRtc.getResourceId("video_camera", "string"));
                 } else {
                     mFirstVideoSwitch.setText(videoTag);
                 }
@@ -174,7 +173,7 @@ public class MergeLayoutConfigView extends FrameLayout {
             mFirstEditTextWidth.setText(String.valueOf(option.getWidth()));
             mFirstEditTextHeight.setText(String.valueOf(option.getHeight()));
         } else {
-            mFirstVideoSwitch.setText(R.string.video_camera);
+            mFirstVideoSwitch.setText(QNRtc.getResourceId("video_camera", "string"));
             mFirstEditTextX.setText("-");
             mFirstEditTextY.setText("-");
             mFirstEditTextZ.setText("-");
@@ -197,12 +196,12 @@ public class MergeLayoutConfigView extends FrameLayout {
             QNMergeTrackOption option = mRemoteSecondVideoTrack.getQNMergeTrackOption();
             String videoTag = mRemoteSecondVideoTrack.getQNTrackInfo().getTag();
             if (UserTrackView.TAG_CAMERA.equals(videoTag)) {
-                mSecondVideoSwitch.setText(R.string.video_camera);
+                mSecondVideoSwitch.setText(QNRtc.getResourceId("video_camera", "string"));
             } else if (UserTrackView.TAG_SCREEN.equals(videoTag)) {
-                mSecondVideoSwitch.setText(R.string.video_screen);
+                mSecondVideoSwitch.setText(QNRtc.getResourceId("video_screen", "string"));
             } else {
                 if (TextUtils.isEmpty(videoTag)) {
-                    mSecondVideoSwitch.setText(R.string.video_camera);
+                    mSecondVideoSwitch.setText(QNRtc.getResourceId("video_camera", "string"));
                 } else {
                     mSecondVideoSwitch.setText(videoTag);
                 }
@@ -213,7 +212,7 @@ public class MergeLayoutConfigView extends FrameLayout {
             mSecondEditTextWidth.setText(String.valueOf(option.getWidth()));
             mSecondEditTextHeight.setText(String.valueOf(option.getHeight()));
         } else {
-            mSecondVideoSwitch.setText(R.string.video_screen);
+            mSecondVideoSwitch.setText(QNRtc.getResourceId("video_screen", "string"));
             mSecondEditTextX.setText("-");
             mSecondEditTextY.setText("-");
             mSecondEditTextZ.setText("-");

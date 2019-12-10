@@ -13,7 +13,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.qbox.QNRTCKitDemo.R;
+import cordova.plugin.qnrtc.QNRtc;
 
 
 /**
@@ -69,23 +69,23 @@ public class ControlFragment extends Fragment {
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mControlView = inflater.inflate(R.layout.fragment_room, container, false);
+        mControlView = inflater.inflate(QNRtc.getResourceId("fragment_room", "layout"), container, false);
 
-        mDisconnectButton = (ImageButton) mControlView.findViewById(R.id.disconnect_button);
-        mCameraSwitchButton = (ImageButton) mControlView.findViewById(R.id.camera_switch_button);
-        mToggleBeautyButton = (ImageButton) mControlView.findViewById(R.id.beauty_button);
-        mToggleMuteButton = (ImageButton) mControlView.findViewById(R.id.microphone_button);
-        mToggleSpeakerButton = (ImageButton) mControlView.findViewById(R.id.speaker_button);
-        mToggleVideoButton = (ImageButton) mControlView.findViewById(R.id.camera_button);
-        mLogShownButton = (ImageButton) mControlView.findViewById(R.id.log_shown_button);
-        mLogView = (LinearLayout) mControlView.findViewById(R.id.log_text);
-        mLocalTextViewForVideo = (TextView) mControlView.findViewById(R.id.local_log_text_video);
+        mDisconnectButton = (ImageButton) mControlView.findViewById(QNRtc.getResourceId("disconnect_button", "id"));
+        mCameraSwitchButton = (ImageButton) mControlView.findViewById(QNRtc.getResourceId("camera_switch_button", "id"));
+        mToggleBeautyButton = (ImageButton) mControlView.findViewById(QNRtc.getResourceId("beauty_button", "id"));
+        mToggleMuteButton = (ImageButton) mControlView.findViewById(QNRtc.getResourceId("microphone_button", "id"));
+        mToggleSpeakerButton = (ImageButton) mControlView.findViewById(QNRtc.getResourceId("speaker_button", "id"));
+        mToggleVideoButton = (ImageButton) mControlView.findViewById(QNRtc.getResourceId("camera_button", "id"));
+        mLogShownButton = (ImageButton) mControlView.findViewById(QNRtc.getResourceId("log_shown_button", "id"));
+        mLogView = (LinearLayout) mControlView.findViewById(QNRtc.getResourceId("log_text", "id"));
+        mLocalTextViewForVideo = (TextView) mControlView.findViewById(QNRtc.getResourceId("local_log_text_video", "id"));
         mLocalTextViewForVideo.setMovementMethod(ScrollingMovementMethod.getInstance());
-        mLocalTextViewForAudio = (TextView) mControlView.findViewById(R.id.local_log_text_audio);
+        mLocalTextViewForAudio = (TextView) mControlView.findViewById(QNRtc.getResourceId("local_log_text_audio", "id"));
         mLocalTextViewForAudio.setMovementMethod(ScrollingMovementMethod.getInstance());
-        mRemoteTextView = (TextView) mControlView.findViewById(R.id.remote_log_text);
+        mRemoteTextView = (TextView) mControlView.findViewById(QNRtc.getResourceId("remote_log_text", "id"));
         mRemoteTextView.setMovementMethod(ScrollingMovementMethod.getInstance());
-        mTimer = (Chronometer) mControlView.findViewById(R.id.timer);
+        mTimer = (Chronometer) mControlView.findViewById(QNRtc.getResourceId("timer", "id"));
 
         mDisconnectButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,7 +108,7 @@ public class ControlFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     boolean enabled = mCallEvents.onToggleBeauty();
-                    mToggleBeautyButton.setImageResource(enabled ? R.mipmap.face_beauty_open : R.mipmap.face_beauty_close);
+                    mToggleBeautyButton.setImageResource(enabled ? QNRtc.getResourceId("face_beauty_open", "mipmap") : QNRtc.getResourceId("face_beauty_close", "mipmap"));
                 }
             });
         }
@@ -117,18 +117,18 @@ public class ControlFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 boolean enabled = mCallEvents.onToggleMic();
-                mToggleMuteButton.setImageResource(enabled ? R.mipmap.microphone : R.mipmap.microphone_disable);
+                mToggleMuteButton.setImageResource(enabled ? QNRtc.getResourceId("microphone", "mipmap") : QNRtc.getResourceId("microphone_disable", "mipmap"));
             }
         });
 
         if (mIsScreenCaptureEnabled || mIsAudioOnly) {
-            mToggleVideoButton.setImageResource(R.mipmap.video_close);
+            mToggleVideoButton.setImageResource(QNRtc.getResourceId("video_close", "mipmap"));
         } else {
             mToggleVideoButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     boolean enabled = mCallEvents.onToggleVideo();
-                    mToggleVideoButton.setImageResource(enabled ? R.mipmap.video_open : R.mipmap.video_close);
+                    mToggleVideoButton.setImageResource(enabled ? QNRtc.getResourceId("video_open", "mipmap") : QNRtc.getResourceId("video_close", "mipmap"));
                 }
             });
         }
@@ -137,7 +137,7 @@ public class ControlFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 boolean enabled = mCallEvents.onToggleSpeaker();
-                mToggleSpeakerButton.setImageResource(enabled ? R.mipmap.loudspeaker : R.mipmap.loudspeaker_disable);
+                mToggleSpeakerButton.setImageResource(enabled ? QNRtc.getResourceId("loudspeaker", "mipmap") : QNRtc.getResourceId("loudspeaker_disable", "mipmap"));
             }
         });
 

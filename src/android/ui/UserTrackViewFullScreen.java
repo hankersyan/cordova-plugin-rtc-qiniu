@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 
-import com.qbox.QNRTCKitDemo.R;
+import cordova.plugin.qnrtc.QNRtc;
 
 
 public class UserTrackViewFullScreen extends UserTrackView {
@@ -20,6 +20,6 @@ public class UserTrackViewFullScreen extends UserTrackView {
 
     @Override
     protected int getLayout() {
-        return R.layout.user_tracks_view_full_screen;
+        return QNRtc.getResourceId("user_tracks_view_full_screen", "layout");
     }
 }
