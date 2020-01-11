@@ -323,7 +323,7 @@
     [super RTCEngine:engine didFailWithError:error];
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self.view hiddenLoading];
+        [self hideLoading];
 
         NSString *errorMessage = error.localizedDescription;
         if (error.code == QNRTCErrorReconnectTokenError) {
@@ -342,8 +342,8 @@
     [super RTCEngine:engine roomStateDidChange:roomState];
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self.view hiddenLoading];
-        
+        [self hideLoading];
+
         if (QNRoomStateConnected == roomState || QNRoomStateReconnected == roomState) {
             [self startTimer];
         } else {
@@ -375,7 +375,7 @@
     [super RTCEngine:engine didPublishLocalTracks:tracks];
     
     dispatch_main_async_safe(^{
-        [self.view hiddenLoading];
+        [self hideLoading];
         [self.view showSuccessTip:@"发布成功了"];
         
         for (QNTrackInfo *trackInfo in tracks) {
@@ -565,5 +565,16 @@
     }
 }
 
+-(void) hideLoading {
+    [self.view hiddenLoading];
+    
+    __weak QRDRTCViewController* that = self;
+    
+    double delayInSeconds = 2.0;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+       [that.view hiddenLoading];
+    });
+}
 
 @end
