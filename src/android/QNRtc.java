@@ -265,4 +265,9 @@ public class QNRtc extends CordovaPlugin {
         return -1;
     }
 
+    public static void setResource(Application app) {
+        _app = app;
+        _resources = app.getResources();
+        _packageName = app.getPackageName();
+    }
 }

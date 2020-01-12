@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-rtc-qiniu",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "description": "基于七牛云实时音视频的视频会议",
   "cordova": {
     "id": "cordova-plugin-rtc-qiniu",
