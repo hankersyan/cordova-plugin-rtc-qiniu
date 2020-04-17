@@ -5,6 +5,7 @@
 //  Created by 冯文秀 on 2018/1/18.
 //  Copyright © 2018年 PILI. All rights reserved.
 //
+#import "QRDPublicHeader.h"
 
 #import "QRDRTCViewController.h"
 #import <ReplayKit/ReplayKit.h>
