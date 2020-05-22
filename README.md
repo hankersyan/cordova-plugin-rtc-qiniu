@@ -33,6 +33,7 @@ oReq.addEventListener("load", function() {
 		app_id: appId,
 		user_id: userId,
 		room_name: roomName,
+		user_info_url: 'http://your.domain.com/api/<USER_ID>', //提供参会者信息的，RESTful JSON接口，<USER_ID>会被替换成实际值，返回用户信息的结构为 { "name":"foo", "avatar":"http://your.domain.com/avatar.jpg" }
 		room_token: this.responseText
 	}
 	QNRtc.start(para);

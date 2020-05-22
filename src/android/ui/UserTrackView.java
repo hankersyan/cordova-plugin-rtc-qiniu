@@ -2,6 +2,9 @@ package cordova.plugin.qnrtc.ui;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -19,11 +22,23 @@ import com.qiniu.droid.rtc.QNSurfaceView;
 import com.qiniu.droid.rtc.QNTrackInfo;
 import com.qiniu.droid.rtc.QNTrackKind;
 
+import org.json.JSONObject;
 import org.webrtc.RendererCommon;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
+
+import javax.net.ssl.HttpsURLConnection;
 
 import cordova.plugin.qnrtc.QNRtc;
 
@@ -57,6 +72,8 @@ public class UserTrackView extends FrameLayout {
     private QNTrackInfo mTrackInfoDisplayInSmallView = null;
     private int mMicrophoneViewVisibility = -1;
     private int mPos = -1;
+
+    private List<JSONObject> _usersInfo = new ArrayList<>();
 
     public UserTrackView(@NonNull Context context) {
         super(context);
@@ -115,6 +132,20 @@ public class UserTrackView extends FrameLayout {
         setMicrophoneStateVisibility(microphoneViewVisibility);
         mAudioView.setText(mUserId);
         onAddTrackInfo(trackInfos);
+
+        String apiUrl = QNRtc.getUserInfoUrl();
+        if (apiUrl != null && !apiUrl.isEmpty()) {
+            JSONObject found = findUser(mUserId);
+            if (found != null) {
+                try {
+                    mAudioView.setText(found.getString("name"));
+                } catch (Exception ex) {
+                    Log.i(TAG, ex.getMessage());
+                }
+            } else {
+                new RequestNameTask().execute(QNRtc.getUserInfoUrl().replace("<USER_ID>", mUserId));
+            }
+        }
     }
 
     public void unSetUserTrackInfo() {
@@ -429,5 +460,72 @@ public class UserTrackView extends FrameLayout {
         if (PRINT_DEBUG_LOG) {
             Log.d(tag + " " + getResourceName(), message);
         }
+    }
+
+    class RequestNameTask extends AsyncTask<String, String, String>{
+
+        @Override
+        protected String doInBackground(String... uri) {
+            String responseString = null;
+            try {
+                String urlStr = uri[0];
+                URL url = new URL(urlStr);
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                if(conn.getResponseCode() == HttpsURLConnection.HTTP_OK){
+                    InputStream in = new BufferedInputStream(conn.getInputStream());
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+                    String line;
+                    StringBuilder result = new StringBuilder();
+                    while ((line = reader.readLine()) != null) {
+                        result.append(line);
+                    }
+                    responseString = result.toString();
+                } else {
+                    //response = "FAILED"; // See documentation for more info on response handling
+                }
+                conn.disconnect();
+            } catch (IOException e) {
+                Log.e(TAG, e.getMessage());
+            }
+            return responseString;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+            try {
+                final JSONObject jObject = new JSONObject(result);
+
+                _usersInfo.add(0, jObject);
+
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        // UI thread
+                        try {
+                            mAudioView.setText(jObject.getString("name"));
+                        } catch (Exception ex) {
+                            Log.e(TAG, ex.getMessage());
+                        }
+                    }
+                });
+            } catch (Exception e) {
+                Log.e(TAG, e.getMessage());
+            }
+        }
+    }
+
+    private JSONObject findUser(String uid) {
+        for (int i = 0; i < _usersInfo.size() - 1; i++) {
+            try {
+                if (_usersInfo.get(i).getString("id").equalsIgnoreCase(uid)) {
+                    return _usersInfo.get(i);
+                }
+            } catch (Exception ex) {
+                Log.i(TAG, ex.getMessage());
+            }
+        }
+        return null;
     }
 }

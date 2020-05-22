@@ -1,9 +1,18 @@
 package cordova.plugin.qnrtc;
 
-import org.apache.cordova.CordovaInterface;
-import org.apache.cordova.CordovaPlugin;
+import android.Manifest;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Application;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.res.Resources;
+import android.provider.Settings;
+
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaArgs;
+import org.apache.cordova.CordovaPlugin;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -11,33 +20,20 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.Manifest;
-import android.app.Activity;
-import android.app.Application;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.res.Resources;
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.provider.Settings;
-import android.util.Log;
-
 import cordova.plugin.qnrtc.activity.RoomActivity;
 import cordova.plugin.qnrtc.utils.ToastUtils;
 
 public class QNRtc extends CordovaPlugin {
 
-    public static CordovaInterface _cordova = null;
-    static Application _app = null;
-    static String _packageName = null;
-    static Resources _resources = null;
-
-    public Context context = null;
-    // JS回掉接口对象
-    public static CallbackContext cb = null;
     // 权限申请码
     private static final int PERMISSION_REQUEST_CODE = 500;
+
+    private static Application _app = null;
+    private static String _packageName = null;
+    private static Resources _resources = null;
+
+    private static String _userInfoUrl = null;
+
     // 需要进行检测的权限数组
     protected String[] needPermissions = {
             Manifest.permission.INTERNET,
@@ -48,7 +44,6 @@ public class QNRtc extends CordovaPlugin {
 
     @Override
     protected void pluginInitialize() {
-        _cordova = this.cordova;
         _app = cordova.getActivity().getApplication();
         _packageName = _app.getPackageName();
         _resources = _app.getResources();
@@ -81,7 +76,6 @@ public class QNRtc extends CordovaPlugin {
         String roomName;
         String roomToken;
         JSONObject params;
-        cb = callbackContext;
 
         try {
             params = args.getJSONObject(0);
@@ -89,7 +83,8 @@ public class QNRtc extends CordovaPlugin {
             userId = params.has("user_id") ? params.getString("user_id") : "";
             roomName = params.has("room_name") ? params.getString("room_name") : "";
             roomToken = params.has("room_token") ? params.getString("room_token") : "";
-			Context context = this.cordova.getActivity().getApplicationContext();
+            _userInfoUrl = params.has("user_info_url") ? params.getString("user_info_url") : "";
+
 			Activity myActivity = this.cordova.getActivity();
 
 			new Thread(new Runnable() {
@@ -188,7 +183,7 @@ public class QNRtc extends CordovaPlugin {
      * 显示提示信息
      */
     private void showMissingPermissionDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        AlertDialog.Builder builder = new AlertDialog.Builder(cordova.getContext());
         builder.setTitle("提示");
         builder.setMessage("当前应用缺少必要权限。\\n\\n请点击\\\"设置\\\"-\\\"权限\\\"-打开所需权限。");
 
@@ -270,4 +265,7 @@ public class QNRtc extends CordovaPlugin {
         _resources = app.getResources();
         _packageName = app.getPackageName();
     }
+
+    public static String getUserInfoUrl() { return _userInfoUrl; }
+
 }
