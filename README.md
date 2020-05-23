@@ -15,7 +15,17 @@ Please apply for APPID at https://www.qiniu.com/products/rtn . 请先申请你�
 cordova plugin add cordova-plugin-rtc-qiniu --variable APIID=YOU_APPID
 ```
 
-# Useage
+# 特性
+
+1. 自定义用户信息：姓名。 
+   
+   1.1 提供用户信息 RESTful api 需自行开发。
+
+   1.2 传入参数：user_info_url，该URL中的<USER_ID>字符串会被替换成实际值。
+   
+   1.3 返回的JSON格式：{ "name":"foo", "avatar":"http://your.domain.com/avatar.jpg" }
+
+# 用法
 
 ```Javascript
 if (typeof QNRtc == 'undefined') {
@@ -33,7 +43,7 @@ oReq.addEventListener("load", function() {
 		app_id: appId,
 		user_id: userId,
 		room_name: roomName,
-		user_info_url: 'http://your.domain.com/api/<USER_ID>', //提供参会者信息的RESTful JSON接口，<USER_ID>会被替换成实际值，返回用户信息的结构为 { "name":"foo", "avatar":"http://your.domain.com/avatar.jpg" }
+		user_info_url: 'http://your.domain.com/api/users/<USER_ID>', //用户信息API，<USER_ID>会被替换成实际值
 		room_token: this.responseText
 	}
 	QNRtc.start(para);
