@@ -9,7 +9,7 @@
 #import "QRDUserView.h"
 #import "QRDPublicHeader.h"
 #import <Masonry.h>
-#import "CDVQNRtc.h"
+#import "CDVQNSettings.h"
 
 @interface QRDUserView ()
 
@@ -313,7 +313,7 @@
     __weak UILabel *wkNameLabel = self.nameLabel;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         @try {
-           NSString* url = [CDVQNRtc getUserInfoUrl];
+            NSString* url = CDVQNSettings.userInfoUrl;
            url = [url stringByReplacingOccurrencesOfString:@"<USER_ID>" withString:userID];
            NSString* result = [self getDataFrom:url];
            NSLog(@"%@", result);

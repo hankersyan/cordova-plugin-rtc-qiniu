@@ -9,8 +9,7 @@
 
 @property (strong, nonatomic) UIWindow *window;
 
+- (void)init:(CDVInvokedUrlCommand *)command;
 - (void)start:(CDVInvokedUrlCommand *)command;
-
-+ (NSString*) getUserInfoUrl;
 
 @end

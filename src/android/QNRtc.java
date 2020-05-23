@@ -32,6 +32,7 @@ public class QNRtc extends CordovaPlugin {
     private static String _packageName = null;
     private static Resources _resources = null;
 
+    private static String _appId = null;
     private static String _userInfoUrl = null;
 
     // 需要进行检测的权限数组
@@ -57,6 +58,11 @@ public class QNRtc extends CordovaPlugin {
             }
             startConference(args, callbackContext);
             return true;
+        } else if (action.equals("init")) {
+            JSONObject params = args.getJSONObject(0);
+            _appId = params.has("app_id") ? params.getString("app_id") : "";
+            _userInfoUrl = params.has("user_info_url") ? params.getString("user_info_url") : "";
+            return true;
         }
 
         return false;
@@ -71,7 +77,6 @@ public class QNRtc extends CordovaPlugin {
      * 获取定位
      */
     public void startConference(final CordovaArgs args, final CallbackContext callbackContext) {
-        String appId;
         String userId;
         String roomName;
         String roomToken;
@@ -79,11 +84,9 @@ public class QNRtc extends CordovaPlugin {
 
         try {
             params = args.getJSONObject(0);
-            appId = params.has("app_id") ? params.getString("app_id") : "";
             userId = params.has("user_id") ? params.getString("user_id") : "";
             roomName = params.has("room_name") ? params.getString("room_name") : "";
             roomToken = params.has("room_token") ? params.getString("room_token") : "";
-            _userInfoUrl = params.has("user_info_url") ? params.getString("user_info_url") : "";
 
 			Activity myActivity = this.cordova.getActivity();
 
@@ -267,5 +270,6 @@ public class QNRtc extends CordovaPlugin {
     }
 
     public static String getUserInfoUrl() { return _userInfoUrl; }
+    public static String getAppId() { return _appId; }
 
 }

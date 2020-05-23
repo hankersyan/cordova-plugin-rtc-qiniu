@@ -40,6 +40,7 @@ QRDUserViewDelegate
 @property (nonatomic, readwrite) NSString *appId;
 @property (nonatomic, readwrite) NSString *roomName;
 @property (nonatomic, readwrite) NSString *roomToken;
+@property (nonatomic, readwrite) NSString *userInfoUrl;
 @property (nonatomic, readonly) BOOL isAdmin;
 @property (nonatomic, strong) UITapGestureRecognizer *singleTap;
 

@@ -52,6 +52,10 @@ var app = {
             return;
         }
         var appId = 'd8lk7l4ed';
+        QNRtc.init({
+            app_id: appId,
+            user_info_url: 'http://your.domain.com/api/<USER_ID>', //提供参会者信息的，RESTful JSON接口，<USER_ID>会被替换成实际值，返回用户信息的结构为 { "name":"foo", "avatar":"http://your.domain.com/avatar.jpg" }
+        });
         var roomName = document.getElementById('room').value;
         var userId = document.getElementById('name').value;
         var bundleId = 'com.qbox.QNRTCKitDemo';
@@ -59,10 +63,8 @@ var app = {
         oReq.addEventListener("load", function() {
             console.log(this.responseText);
             var para = {
-                app_id: appId,
                 user_id: userId,
                 room_name: roomName,
-                user_info_url: 'http://your.domain.com/api/<USER_ID>', //提供参会者信息的，RESTful JSON接口，<USER_ID>会被替换成实际值，返回用户信息的结构为 { "name":"foo", "avatar":"http://your.domain.com/avatar.jpg" }
                 room_token: this.responseText
             }
             QNRtc.start(para);

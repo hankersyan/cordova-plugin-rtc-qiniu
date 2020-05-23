@@ -36,27 +36,29 @@ if (typeof QNRtc == 'undefined') {
 	alert('QNRtc plugin not found');
 	return;
 }
-var appId = 'd8lk7l4ed';
-var roomName = 'room711';
-var userId = 'user007';
+var appId = 'd8lk7l4ed'; // 七牛云APPID
+QNRtc.init({
+	app_id: appId,
+	user_info_url: 'http://your.domain.com/api/users/<USER_ID>', //用户信息api，<USER_ID>会被替换成实际值
+});
+var roomName = document.getElementById('room').value;
+var userId = document.getElementById('name').value;
 var bundleId = 'com.qbox.QNRTCKitDemo';
 var oReq = new XMLHttpRequest();
 oReq.addEventListener("load", function() {
 	console.log(this.responseText);
 	var para = {
-		app_id: appId,
 		user_id: userId,
 		room_name: roomName,
-		user_info_url: 'http://your.domain.com/api/users/<USER_ID>', //用户信息API，<USER_ID>会被替换成实际值
 		room_token: this.responseText
 	}
 	QNRtc.start(para);
 });
-oReq.open("GET", "https://api-demo.qnsdk.com/v1/rtc/token/admin/"
-	+"app/"+appId
-	+"/room/"+roomName
-	+"/user/"+userId
-	+"?bundleId="+bundleId);
+oReq.open("GET", "https://api-demo.qnsdk.com/v1/rtc/token/admin/" +
+	"app/" + appId +
+	"/room/" + roomName +
+	"/user/" + userId +
+	"?bundleId=" + bundleId);
 oReq.send();
 ```
 
