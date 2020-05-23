@@ -9,6 +9,7 @@
 #import "QRDUserView.h"
 #import "QRDPublicHeader.h"
 #import <Masonry.h>
+#import "CDVQNRtc.h"
 
 @interface QRDUserView ()
 
@@ -116,6 +117,8 @@
     dispatch_main_async_safe(^{
         self.nameLabel.text = userId;
     });
+    
+    [self refreshName:userId];
 }
 
 //- (void)setTrackId:(NSString *)trackId {
@@ -306,5 +309,46 @@
     }
 }
 
+-(void) refreshName:(NSString*)userID {
+    __weak UILabel *wkNameLabel = self.nameLabel;
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        @try {
+           NSString* url = [CDVQNRtc getUserInfoUrl];
+           url = [url stringByReplacingOccurrencesOfString:@"<USER_ID>" withString:userID];
+           NSString* result = [self getDataFrom:url];
+           NSLog(@"%@", result);
+           NSData *data = [result dataUsingEncoding:NSUTF8StringEncoding];
+           id json = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+           NSString *name = [json objectForKey:@"name"];
+
+           dispatch_main_async_safe(^{
+               if (wkNameLabel) {
+                   wkNameLabel.text = name;
+               }
+           });
+        }
+        @catch (NSException * e) {
+           NSLog(@"Exception: %@", e);
+        }
+    });
+}
+
+- (NSString *) getDataFrom:(NSString *)url{
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+    [request setHTTPMethod:@"GET"];
+    [request setURL:[NSURL URLWithString:url]];
+
+    NSError *error = nil;
+    NSHTTPURLResponse *responseCode = nil;
+
+    NSData *oResponseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&responseCode error:&error];
+
+    if([responseCode statusCode] != 200){
+        NSLog(@"Error getting %@, HTTP status code %i", url, [responseCode statusCode]);
+        return nil;
+    }
+
+    return [[NSString alloc] initWithData:oResponseData encoding:NSUTF8StringEncoding];
+}
 
 @end

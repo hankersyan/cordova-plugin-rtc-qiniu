@@ -37,6 +37,9 @@
         rtcVC.userId = [param objectForKey:@"user_id"];
         rtcVC.roomToken = [param objectForKey:@"room_token"];
         rtcVC.appId = [param objectForKey:@"app_id"];
+        
+        _userInfoUrl = [NSString stringWithString:[param objectForKey:@"user_info_url"]];
+        
         rtcVC.configDic = configDic;
 //        rtcVC.videoEnabled = YES;
         
@@ -90,5 +93,10 @@
 
 #pragma mark "Private methods"
 
+static NSString* _userInfoUrl;
+
++ (NSString*) getUserInfoUrl {
+    return _userInfoUrl;
+}
 
 @end

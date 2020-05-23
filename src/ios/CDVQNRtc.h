@@ -11,4 +11,6 @@
 
 - (void)start:(CDVInvokedUrlCommand *)command;
 
++ (NSString*) getUserInfoUrl;
+
 @end
