@@ -15,15 +15,19 @@ Please apply for APPID at https://www.qiniu.com/products/rtn . 请先申请你�
 cordova plugin add cordova-plugin-rtc-qiniu --variable APIID=YOU_APPID
 ```
 
-# 特性
+# 说明
 
-1. 自定义用户信息：姓名。 
+1. 限制
    
-   1.1 提供用户信息 RESTful api 需自行开发。
+   1.1 七牛云实时音视频 userId 仅允许字母、数字和下划线
 
-   1.2 传入参数：user_info_url，该URL中的<USER_ID>字符串会被替换成实际值。
+2. 自定义用户信息：姓名。 
    
-   1.3 返回的JSON格式：{ "name":"foo", "avatar":"http://your.domain.com/avatar.jpg" }
+   2.1 提供用户信息 RESTful api 需自行开发。
+
+   2.2 传入参数：user_info_url，该URL中的<USER_ID>字符串会被替换成实际值。
+
+   2.3 返回的JSON格式：{ "name":"foo", "avatar":"http://your.domain.com/avatar.jpg" }
 
 # 用法
 
