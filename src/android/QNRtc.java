@@ -80,6 +80,7 @@ public class QNRtc extends CordovaPlugin {
         String userId;
         String roomName;
         String roomToken;
+        String enableMergeStream;
         JSONObject params;
 
         try {
@@ -87,6 +88,7 @@ public class QNRtc extends CordovaPlugin {
             userId = params.has("user_id") ? params.getString("user_id") : "";
             roomName = params.has("room_name") ? params.getString("room_name") : "";
             roomToken = params.has("room_token") ? params.getString("room_token") : "";
+            enableMergeStream = params.has("enable_merge_stream") ? params.getString("enable_merge_stream") : "";
 
 			Activity myActivity = this.cordova.getActivity();
 
@@ -105,6 +107,7 @@ public class QNRtc extends CordovaPlugin {
 							intent.putExtra(RoomActivity.EXTRA_ROOM_ID, roomName.trim());
 							intent.putExtra(RoomActivity.EXTRA_ROOM_TOKEN, roomToken);
 							intent.putExtra(RoomActivity.EXTRA_USER_ID, userId);
+                            intent.putExtra(RoomActivity.EXTRA_MERGE_STREAM, enableMergeStream);
                             myActivity.startActivity(intent);
 						}
 					});

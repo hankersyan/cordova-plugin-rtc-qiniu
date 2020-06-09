@@ -32,7 +32,9 @@ import com.qiniu.droid.rtc.QNTrackInfo;
 import com.qiniu.droid.rtc.QNTrackKind;
 import com.qiniu.droid.rtc.QNVideoFormat;
 
+
 import com.qiniu.droid.rtc.model.QNAudioDevice;
+import com.qiniu.droid.rtc.model.QNMergeTrackOption;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,9 +44,12 @@ import java.util.List;
 
 import cordova.plugin.qnrtc.QNRtc;
 import cordova.plugin.qnrtc.fragment.ControlFragment;
+import cordova.plugin.qnrtc.model.RemoteTrack;
+import cordova.plugin.qnrtc.model.RemoteUserList;
 import cordova.plugin.qnrtc.ui.UserTrackView;
 import cordova.plugin.qnrtc.utils.Config;
 import cordova.plugin.qnrtc.utils.QNAppServer;
+import cordova.plugin.qnrtc.utils.SplitUtils;
 import cordova.plugin.qnrtc.utils.ToastUtils;
 import cordova.plugin.qnrtc.utils.TrackWindowMgr;
 
@@ -59,6 +64,7 @@ public class RoomActivity extends Activity implements QNRTCEngineEventListener, 
     public static final String EXTRA_USER_ID = "USER_ID";
     public static final String EXTRA_ROOM_TOKEN = "ROOM_TOKEN";
     public static final String EXTRA_ROOM_ID = "ROOM_ID";
+    public static final String EXTRA_MERGE_STREAM = "MERGE_STREAM";
 
     private static final String[] MANDATORY_PERMISSIONS = {
             "android.permission.MODIFY_AUDIO_SETTINGS",
@@ -96,6 +102,8 @@ public class RoomActivity extends Activity implements QNRTCEngineEventListener, 
     private int mCaptureMode = Config.CAMERA_CAPTURE;
 
     private TrackWindowMgr mTrackWindowMgr;
+    private RemoteUserList mRemoteUserList = new RemoteUserList();
+    private boolean enableMergeStream = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,6 +127,14 @@ public class RoomActivity extends Activity implements QNRTCEngineEventListener, 
         mUserId = intent.getStringExtra(EXTRA_USER_ID);
         mRoomId = intent.getStringExtra(EXTRA_ROOM_ID);
         mIsAdmin = mUserId.equals(QNAppServer.ADMIN_USER);
+        String tmp = intent.getStringExtra((EXTRA_MERGE_STREAM));
+        if (tmp != null) {
+            if (tmp.compareToIgnoreCase("1") == 0 || tmp.compareToIgnoreCase("true") == 0) {
+                enableMergeStream = true;
+            } else {
+                enableMergeStream = false;
+            }
+        }
 
         mTrackWindowFullScreen = (UserTrackView) findViewById(QNRtc.getResourceId("track_window_full_screen", "id"));
         mTrackWindowsList = new LinkedList<UserTrackView>(Arrays.asList(
@@ -372,11 +388,13 @@ public class RoomActivity extends Activity implements QNRTCEngineEventListener, 
     @Override
     public void onRemoteUserJoined(String remoteUserId, String userData) {
         updateRemoteLogText("onRemoteUserJoined:remoteUserId = " + remoteUserId + " ,userData = " + userData);
+        mRemoteUserList.onUserJoined(remoteUserId, userData);
     }
 
     @Override
     public void onRemoteUserLeft(final String remoteUserId) {
         updateRemoteLogText("onRemoteUserLeft:remoteUserId = " + remoteUserId);
+        mRemoteUserList.onUserLeft(remoteUserId);
     }
 
     @Override
@@ -388,11 +406,16 @@ public class RoomActivity extends Activity implements QNRTCEngineEventListener, 
     @Override
     public void onRemotePublished(String remoteUserId, List<QNTrackInfo> trackInfoList) {
         updateRemoteLogText("onRemotePublished:remoteUserId = " + remoteUserId);
+        mRemoteUserList.onTracksPublished(remoteUserId, trackInfoList);
+        if (mEngine.isFirstUser()) {
+            resetMergeStream();
+        }
     }
 
     @Override
     public void onRemoteUnpublished(final String remoteUserId, List<QNTrackInfo> trackInfoList) {
         updateRemoteLogText("onRemoteUnpublished:remoteUserId = " + remoteUserId);
+        mRemoteUserList.onTracksUnPublished(remoteUserId, trackInfoList);
         if (mTrackWindowMgr != null) {
             mTrackWindowMgr.removeTrackInfo(remoteUserId, trackInfoList);
         }
@@ -549,4 +572,47 @@ public class RoomActivity extends Activity implements QNRTCEngineEventListener, 
         }
         return mBeautyEnabled;
     }
+
+    private void resetMergeStream() {
+        if (!enableMergeStream) return;
+
+        Log.d(TAG, "resetMergeStream()");
+        List<QNMergeTrackOption> configuredMergeTracksOptions = new ArrayList<>();
+
+        // video tracks merge layout options.
+        List<RemoteTrack> remoteVideoTrackInfoList = mRemoteUserList.getRemoteVideoTracks();
+        if (!remoteVideoTrackInfoList.isEmpty()) {
+            List<QNMergeTrackOption> mergeTrackOptions = SplitUtils.split(remoteVideoTrackInfoList.size(),
+                    QNAppServer.STREAMING_WIDTH, QNAppServer.STREAMING_HEIGHT);
+            if (mergeTrackOptions.size() != remoteVideoTrackInfoList.size()) {
+                Log.e(TAG, "split option error.");
+                return;
+            }
+
+            for (int i = 0; i < mergeTrackOptions.size(); i++) {
+                RemoteTrack remoteTrack = remoteVideoTrackInfoList.get(i);
+
+                if (!remoteTrack.isTrackInclude()) {
+                    continue;
+                }
+                QNMergeTrackOption item = mergeTrackOptions.get(i);
+                remoteTrack.updateQNMergeTrackOption(item);
+                configuredMergeTracksOptions.add(remoteTrack.getQNMergeTrackOption());
+            }
+        }
+
+        // audio tracks merge layout options
+        List<RemoteTrack> remoteAudioTrackInfoList = mRemoteUserList.getRemoteAudioTracks();
+        if (!remoteAudioTrackInfoList.isEmpty()) {
+            for (RemoteTrack remoteTrack : remoteAudioTrackInfoList) {
+                if (!remoteTrack.isTrackInclude()) {
+                    continue;
+                }
+                configuredMergeTracksOptions.add(remoteTrack.getQNMergeTrackOption());
+            }
+        }
+
+        mEngine.setMergeStreamLayouts(configuredMergeTracksOptions, null);
+    }
+
 }

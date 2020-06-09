@@ -50,6 +50,7 @@ oReq.addEventListener("load", function() {
 	var para = {
 		user_id: userId,
 		room_name: roomName,
+		enable_merge_stream: true, // 合流
 		room_token: this.responseText
 	}
 	QNRtc.start(para);
