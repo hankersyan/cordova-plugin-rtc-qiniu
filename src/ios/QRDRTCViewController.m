@@ -11,9 +11,15 @@
 #import <ReplayKit/ReplayKit.h>
 #import "UIView+Alert.h"
 #import <QNRTCKit/QNRTCKit.h>
+#import "QRDMergeInfo.h"
 
 
 @interface QRDRTCViewController ()
+
+@property (nonatomic, strong) NSMutableArray *mergeUserArray;
+@property (nonatomic, strong) NSMutableArray *mergeInfoArray;
+@property (nonatomic, assign) CGSize mergeStreamSize;
+@property (nonatomic, strong) NSString *mergeJobId;
 
 @end
 
@@ -23,7 +29,11 @@
     [super viewDidLoad];
     
     self.view.backgroundColor = QRD_COLOR_RGBA(20, 20, 20, 1);
-    
+        
+    self.mergeStreamSize = CGSizeMake(480, 848);
+    self.mergeInfoArray = [[NSMutableArray alloc] init];
+    self.mergeUserArray = [[NSMutableArray alloc] init];
+
     self.videoEncodeSize = CGSizeFromString(_configDic[@"VideoSize"]);
     self.bitrate = [_configDic[@"Bitrate"] integerValue];
     [self setupEngine];
@@ -402,11 +412,39 @@
 }
 
 /**
+ * 远端用户发布音/视频的回调
+ */
+- (void)RTCEngine:(QNRTCEngine *)engine didPublishTracks:(NSArray<QNTrackInfo *> *)tracks ofRemoteUserId:(NSString *)userId {
+    
+    NSString *str = [NSString stringWithFormat:@"远端用户: %@ 发布成功的回调:\nTracks: %@",  userId, tracks];
+    [self addLogString:str];
+    
+    dispatch_main_async_safe(^{
+        [self addMergeInfoWithTracks:tracks userId:userId];
+        if ([self enableMergeStream] && [self isFirstUser]) {
+            [self resetMergeFrame];
+        }
+        //[self resetUserList];
+    });
+}
+
+/**
  * 远端用户取消发布音/视频的回调
  */
 - (void)RTCEngine:(QNRTCEngine *)engine didUnPublishTracks:(NSArray<QNTrackInfo *> *)tracks ofRemoteUserId:(NSString *)userId {
     [super RTCEngine:engine didUnPublishTracks:tracks ofRemoteUserId:userId];
-    
+        
+    NSString *str = [NSString stringWithFormat:@"远端用户: %@ 取消发布的回调:\nTracks: %@",  userId, tracks];
+    [self addLogString:str];
+
+    dispatch_main_async_safe(^{
+        [self removeMergeInfoWithTracks:tracks userId:userId];
+        if ([self enableMergeStream] && [self isFirstUser]) {
+            [self resetMergeFrame];
+        }
+//        [self resetUserList];
+    })
+
     dispatch_main_async_safe(^{
         for (QNTrackInfo *trackInfo in tracks) {
             QRDUserView *userView = [self userViewWithUserId:userId];
@@ -576,6 +614,197 @@
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
        [that.view hiddenLoading];
     });
+}
+
+- (void)addMergeInfoWithTracks:(NSArray *)tracks userId:(NSString *)userId {
+    
+    for (QNTrackInfo *trackInfo in tracks) {
+        QRDMergeInfo *mergeInfo = [[QRDMergeInfo alloc] init];
+        mergeInfo.trackId = trackInfo.trackId;
+        mergeInfo.userId = userId;
+        mergeInfo.kind = trackInfo.kind;
+        mergeInfo.merged = YES;
+        mergeInfo.trackTag = trackInfo.tag;
+        
+        if (trackInfo.kind == QNTrackKindVideo) {
+            [self.mergeInfoArray insertObject:mergeInfo atIndex:0];
+        }
+        else {
+            [self.mergeInfoArray addObject:mergeInfo];
+        }
+    }
+    
+    if (![self.mergeUserArray containsObject:userId]) {
+        [self.mergeUserArray addObject:userId];
+    }
+}
+
+- (void)removeMergeInfoWithTracks:(NSArray *)tracks userId:(NSString *)userId {
+    for (QNTrackInfo *trackInfo in tracks) {
+        [self removeMergeInfoWithTrackId:trackInfo.trackId];
+    }
+    
+    BOOL deleteUser = YES;
+    for (QRDMergeInfo *info in self.mergeInfoArray) {
+        if ([info.userId isEqualToString:userId]) {
+            deleteUser = NO;
+            break;
+        }
+    }
+    if (deleteUser) {
+        [self.mergeUserArray removeObject:userId];
+    }
+}
+
+- (void)removeMergeInfoWithUserId:(NSString *)userId {
+    if (self.mergeInfoArray.count <= 0) {
+        return;
+    }
+    
+    for (NSInteger index = self.mergeInfoArray.count - 1; index >= 0; index--) {
+        QRDMergeInfo *info = self.mergeInfoArray[index];
+        if ([info.userId isEqualToString:userId]) {
+            [self.mergeInfoArray removeObject:info];
+        }
+    }
+    
+    [self.mergeUserArray removeObject:userId];
+}
+
+- (void)removeMergeInfoWithTrackId:(NSString *)trackId {
+    if (self.mergeInfoArray.count <= 0) {
+        return;
+    }
+    
+    for (NSInteger index = self.mergeInfoArray.count - 1; index >= 0; index--) {
+        QRDMergeInfo *info = self.mergeInfoArray[index];
+        if ([info.trackId isEqualToString:trackId]) {
+            [self.mergeInfoArray removeObject:info];
+        }
+    }
+}
+
+- (void)resetMergeFrame {
+
+    //  每当有用户发布或者取消发布的时候，都重置合流参数
+    NSMutableArray *videoMergeArray = [[NSMutableArray alloc] init];
+    for (QRDMergeInfo *info in self.mergeInfoArray) {
+        if (info.merged && QNTrackKindVideo == info.kind) {
+            [videoMergeArray addObject:info];
+        }
+    }
+    
+    if (videoMergeArray.count > 0) {
+        NSArray *mergeFrameArray = [self getTrackMergeFrame:(int)videoMergeArray.count];
+        
+        for (int i = 0; i < mergeFrameArray.count; i ++) {
+            QRDMergeInfo * info = [videoMergeArray objectAtIndex:i ];
+            info.mergeFrame = [[mergeFrameArray objectAtIndex:i] CGRectValue];
+        }
+    }
+    
+    NSMutableArray *array = [NSMutableArray new];
+    for (QRDMergeInfo *info in self.mergeInfoArray) {
+        if (info.isMerged) {
+            QNMergeStreamLayout *layout = [[QNMergeStreamLayout alloc] init];
+            layout.trackId = info.trackId;
+            layout.frame = info.mergeFrame;
+            layout.zIndex = info.zIndex;
+            [array addObject:layout];
+        }
+    }
+    
+    if (array.count > 0) {
+        [self.engine setMergeStreamLayouts:array jobId:self.mergeJobId];
+    }
+}
+
+- (NSArray <NSValue *>*)getTrackMergeFrame:(int)count {
+    
+    NSMutableArray *frameArray = [[NSMutableArray alloc] init];
+    if (1 == count) {
+        CGRect rc = CGRectMake(0, 0, self.mergeStreamSize.width, self.mergeStreamSize.height);
+        NSValue *value = [NSValue valueWithCGRect:rc];
+        [frameArray addObject:value];
+        return frameArray;
+    }
+    
+    int power = log2(count);
+    int bigFrameCount = pow(2, power);
+    int left = count - bigFrameCount;
+    
+    int widthPower = power / 2;
+    int heightPower = power - power / 2;
+    
+    CGRect *pRect = (CGRect *)malloc(sizeof(CGRect) * bigFrameCount);
+    int row = pow(2, heightPower);
+    int col = pow(2, widthPower);
+    CGFloat width = self.mergeStreamSize.width / (pow(2, widthPower));
+    CGFloat height = self.mergeStreamSize.height / (pow(2, heightPower));
+    
+    for (int i = 0; i < row; i ++) {
+        for (int j = 0; j < col; j ++) {
+            pRect[i * col + j].origin.x = j * width;
+            pRect[i * col + j].origin.y = i * height;
+            pRect[i * col + j].size.width = width;
+            pRect[i * col + j].size.height = height;
+        }
+    }
+    
+    if (power % 2 == 0) {
+        // 需要横着补刀
+        for (int i = 0; i < left; i ++) {
+            CGRect rc = pRect[i];
+            CGRect rc1 = rc;
+            rc1.size.height = rc.size.height / 2;
+            CGRect rc2 = rc;
+            rc2.origin.y = rc.origin.y + rc.size.height / 2;
+            rc2.size.height = rc.size.height / 2;
+            
+            NSValue *value = [NSValue valueWithCGRect:rc1];
+            [frameArray addObject:value];
+            value = [NSValue valueWithCGRect:rc2];
+            [frameArray addObject:value];
+        }
+        for (int i = left; i < bigFrameCount; i ++) {
+            CGRect rc = pRect[i];
+            NSValue *value = [NSValue valueWithCGRect:rc];
+            [frameArray addObject:value];
+        }
+    } else {
+        // 需要竖着补刀
+        for (int i = 0; i < left; i ++) {
+            CGRect rc = pRect[i];
+            CGRect rc1 = rc;
+            rc1.size.width = rc.size.width / 2;
+            CGRect rc2 = rc;
+            rc2.origin.x = rc.origin.x + rc.size.width / 2;
+            rc2.size.width = rc.size.width / 2;
+            
+            NSValue *value = [NSValue valueWithCGRect:rc1];
+            [frameArray addObject:value];
+            value = [NSValue valueWithCGRect:rc2];
+            [frameArray addObject:value];
+        }
+        
+        for (int i = left; i < bigFrameCount; i ++) {
+            CGRect rc = pRect[i];
+            NSValue *value = [NSValue valueWithCGRect:rc];
+            [frameArray addObject:value];
+        }
+    }
+    
+    free(pRect);
+    
+    return frameArray;
+}
+
+-(BOOL)isFirstUser {
+    if ([[self.engine userList] count] > 0) {
+        NSString *firstUser = [[self.engine userList] objectAtIndex:0];
+        return [firstUser caseInsensitiveCompare:self.userId];
+    }
+    return NO;
 }
 
 @end

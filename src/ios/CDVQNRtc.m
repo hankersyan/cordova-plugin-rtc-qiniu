@@ -6,7 +6,6 @@
 #import "CDVQNRtc.h"
 #import "QRDPublicHeader.h"
 #import "QRDRTCViewController.h"
-#import "CDVQNSettings.h"
 
 @interface CDVQNRtc ()
 
@@ -23,12 +22,6 @@
     [self initCompleteBlock];
 }
 
-- (void)init:(CDVInvokedUrlCommand *)command {
-    NSDictionary *param = [command.arguments objectAtIndex:0];
-    [CDVQNSettings setAppId:[param objectForKey:@"app_id"]];
-    [CDVQNSettings setUserInfoUrl:[param objectForKey:@"user_info_url"]];
-}
-
 - (void)start:(CDVInvokedUrlCommand *)command {
     [self.commandDelegate runInBackground:^{
         NSDictionary *param = [command.arguments objectAtIndex:0];
@@ -43,9 +36,12 @@
         rtcVC.roomName = [param objectForKey:@"room_name"];
         rtcVC.userId = [param objectForKey:@"user_id"];
         rtcVC.roomToken = [param objectForKey:@"room_token"];
-        
+        rtcVC.appId = [param objectForKey:@"app_id"];
         rtcVC.configDic = configDic;
+        rtcVC.enableMergeStream = [param objectForKey:@"enable_merge_stream"];
 //        rtcVC.videoEnabled = YES;
+        
+        NSLog(@"%@, %@, enableMergeStream=%d", rtcVC.roomName, rtcVC.userId, rtcVC.enableMergeStream);
         
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             [self presentVC:rtcVC animated:YES completion:nil];
@@ -96,5 +92,6 @@
 }
 
 #pragma mark "Private methods"
+
 
 @end
