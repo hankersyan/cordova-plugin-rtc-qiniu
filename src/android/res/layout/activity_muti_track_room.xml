@@ -12,56 +12,76 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <cordova.plugin.qnrtc.ui.UserTrackView
-        android:id="@+id/track_window_a"
-        android:layout_width="0dp"
-        android:layout_height="0dp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <cordova.plugin.qnrtc.ui.UserTrackView
-        android:id="@+id/track_window_b"
-        android:layout_width="0dp"
-        android:layout_height="0dp" />
+        <org.apache.cordova.engine.SystemWebView
+            android:id="@+id/webview"
+            android:layout_width="300dp"
+            android:layout_height="match_parent"
+            android:background="#fff">
 
-    <cordova.plugin.qnrtc.ui.UserTrackView
-        android:id="@+id/track_window_c"
-        android:layout_width="0dp"
-        android:layout_height="0dp" />
+        </org.apache.cordova.engine.SystemWebView>
 
-    <cordova.plugin.qnrtc.ui.UserTrackView
-        android:id="@+id/track_window_d"
-        android:layout_width="0dp"
-        android:layout_height="0dp" />
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <cordova.plugin.qnrtc.ui.UserTrackView
-        android:id="@+id/track_window_e"
-        android:layout_width="0dp"
-        android:layout_height="0dp" />
+            <cordova.plugin.qnrtc.ui.UserTrackView
+                android:id="@+id/track_window_a"
+                android:layout_width="0dp"
+                android:layout_height="0dp" />
 
-    <cordova.plugin.qnrtc.ui.UserTrackView
-        android:id="@+id/track_window_f"
-        android:layout_width="0dp"
-        android:layout_height="0dp" />
+            <cordova.plugin.qnrtc.ui.UserTrackView
+                android:id="@+id/track_window_b"
+                android:layout_width="0dp"
+                android:layout_height="0dp" />
 
-    <cordova.plugin.qnrtc.ui.UserTrackView
-        android:id="@+id/track_window_g"
-        android:layout_width="0dp"
-        android:layout_height="0dp" />
+            <cordova.plugin.qnrtc.ui.UserTrackView
+                android:id="@+id/track_window_c"
+                android:layout_width="0dp"
+                android:layout_height="0dp" />
 
-    <cordova.plugin.qnrtc.ui.UserTrackView
-        android:id="@+id/track_window_h"
-        android:layout_width="0dp"
-        android:layout_height="0dp" />
+            <cordova.plugin.qnrtc.ui.UserTrackView
+                android:id="@+id/track_window_d"
+                android:layout_width="0dp"
+                android:layout_height="0dp" />
 
-    <cordova.plugin.qnrtc.ui.UserTrackView
-        android:id="@+id/track_window_i"
-        android:layout_width="0dp"
-        android:layout_height="0dp" />
+            <cordova.plugin.qnrtc.ui.UserTrackView
+                android:id="@+id/track_window_e"
+                android:layout_width="0dp"
+                android:layout_height="0dp" />
 
-    <FrameLayout
-        android:id="@+id/control_fragment_container"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center|bottom"
-        android:paddingBottom="32dp" />
+            <cordova.plugin.qnrtc.ui.UserTrackView
+                android:id="@+id/track_window_f"
+                android:layout_width="0dp"
+                android:layout_height="0dp" />
+
+            <cordova.plugin.qnrtc.ui.UserTrackView
+                android:id="@+id/track_window_g"
+                android:layout_width="0dp"
+                android:layout_height="0dp" />
+
+            <cordova.plugin.qnrtc.ui.UserTrackView
+                android:id="@+id/track_window_h"
+                android:layout_width="0dp"
+                android:layout_height="0dp" />
+
+            <cordova.plugin.qnrtc.ui.UserTrackView
+                android:id="@+id/track_window_i"
+                android:layout_width="0dp"
+                android:layout_height="0dp" />
+
+            <FrameLayout
+                android:id="@+id/control_fragment_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|bottom"
+                android:paddingBottom="32dp" />
+
+        </FrameLayout>
+
+    </LinearLayout>
 
 </FrameLayout>

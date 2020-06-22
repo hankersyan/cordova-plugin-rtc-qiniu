@@ -1,7 +1,6 @@
 package cordova.plugin.qnrtc.activity;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.FragmentTransaction;
 import android.content.Context;
@@ -31,10 +30,16 @@ import com.qiniu.droid.rtc.QNStatisticsReport;
 import com.qiniu.droid.rtc.QNTrackInfo;
 import com.qiniu.droid.rtc.QNTrackKind;
 import com.qiniu.droid.rtc.QNVideoFormat;
-
-
 import com.qiniu.droid.rtc.model.QNAudioDevice;
 import com.qiniu.droid.rtc.model.QNMergeTrackOption;
+
+import org.apache.cordova.ConfigXmlParser;
+import org.apache.cordova.CordovaActivity;
+import org.apache.cordova.CordovaWebView;
+import org.apache.cordova.CordovaWebViewImpl;
+import org.apache.cordova.LOG;
+import org.apache.cordova.engine.SystemWebView;
+import org.apache.cordova.engine.SystemWebViewEngine;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -57,7 +62,7 @@ import static cordova.plugin.qnrtc.utils.Config.DEFAULT_BITRATE;
 import static cordova.plugin.qnrtc.utils.Config.DEFAULT_FPS;
 import static cordova.plugin.qnrtc.utils.Config.DEFAULT_RESOLUTION;
 
-public class RoomActivity extends Activity implements QNRTCEngineEventListener, ControlFragment.OnCallEvents {
+public class Room2Activity extends CordovaActivity implements QNRTCEngineEventListener, ControlFragment.OnCallEvents {
     private static final String TAG = "RoomActivity";
     private static final int BITRATE_FOR_SCREEN_VIDEO = (int) (1.5 * 1000 * 1000);
 
@@ -71,6 +76,8 @@ public class RoomActivity extends Activity implements QNRTCEngineEventListener, 
             "android.permission.RECORD_AUDIO",
             "android.permission.INTERNET"
     };
+
+    SystemWebView webView;
 
     private Toast mLogToast;
     private List<String> mHWBlackList = new ArrayList<>();
@@ -106,7 +113,7 @@ public class RoomActivity extends Activity implements QNRTCEngineEventListener, 
     private boolean enableMergeStream = false;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
@@ -120,7 +127,7 @@ public class RoomActivity extends Activity implements QNRTCEngineEventListener, 
         mScreenWidth = outMetrics.widthPixels;
         mScreenHeight = outMetrics.heightPixels;
 
-        setContentView(QNRtc.getResourceId("activity_room", "layout"));
+        setContentView(QNRtc.getResourceId("activity_muti_track_room", "layout"));
 
         Intent intent = getIntent();
         mRoomToken = intent.getStringExtra(EXTRA_ROOM_TOKEN);
@@ -189,6 +196,17 @@ public class RoomActivity extends Activity implements QNRTCEngineEventListener, 
         List<QNTrackInfo> localTrackListExcludeScreenTrack = new ArrayList<>(mLocalTrackList);
         localTrackListExcludeScreenTrack.remove(mLocalScreenTrack);
         mTrackWindowMgr.addTrackInfo(mUserId, localTrackListExcludeScreenTrack);
+
+        webView = findViewById(QNRtc.getResourceId("webview", "id"));
+
+        String url = getIntent().getStringExtra("url");
+        if (url != null && !url.isEmpty()) {
+            launchUrl = url;
+        }
+
+        super.init();
+
+        loadUrl(launchUrl);
     }
 
     private void initQNRTCEngine() {
@@ -281,7 +299,7 @@ public class RoomActivity extends Activity implements QNRTCEngineEventListener, 
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
         if (mEngine != null) {
             mEngine.destroy();
@@ -439,7 +457,7 @@ public class RoomActivity extends Activity implements QNRTCEngineEventListener, 
 
     @Override
     public void onKickedOut(String userId) {
-        ToastUtils.s(RoomActivity.this, getString(QNRtc.getResourceId("kicked_by_admin", "string")));
+        ToastUtils.s(Room2Activity.this, getString(QNRtc.getResourceId("kicked_by_admin", "string")));
         finish();
     }
 
@@ -613,6 +631,50 @@ public class RoomActivity extends Activity implements QNRTCEngineEventListener, 
         }
 
         mEngine.setMergeStreamLayouts(configuredMergeTracksOptions, null);
+    }
+
+    @Override
+    public void onBackPressed() {
+        return;
+    }
+
+    @Override
+    protected CordovaWebView makeWebView() {
+        return new CordovaWebViewImpl(new SystemWebViewEngine(webView));
+    }
+
+    @Override
+    protected void createViews() {
+        appView.getView().requestFocusFromTouch();
+    }
+
+    @Override
+    protected void loadConfig() {
+        ConfigXmlParser2 parser = new ConfigXmlParser2();
+        parser.parse(this);
+        preferences = parser.getPreferences();
+        preferences.setPreferencesBundle(getIntent().getExtras());
+        launchUrl = parser.getLaunchUrl();
+        pluginEntries = parser.getPluginEntries();
+    }
+
+    class ConfigXmlParser2 extends ConfigXmlParser {
+
+        @Override
+        public void parse(Context action) {
+            // First checking the class namespace for config.xml
+            int id = action.getResources().getIdentifier("config_webview", "xml", action.getPackageName());
+            if (id == 0) {
+                LOG.w(TAG, "res/xml/config_webview.xml is missing!");
+                id = action.getResources().getIdentifier("config", "xml", action.getPackageName());
+                if (id == 0) {
+                    LOG.e(TAG, "res/xml/config.xml is missing!");
+                    return;
+                }
+            }
+            parse(action.getResources().getXml(id));
+        }
+
     }
 
 }

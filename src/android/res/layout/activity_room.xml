@@ -1,55 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#151515"
-    android:onClick="onClickScreen"
+    android:background="@color/backgroundColor"
+    tools:context="cordova.plugin.qnrtc.activity.RoomActivity"
     tools:ignore="MergeRootFrame">
 
-    <cordova.plugin.qnrtc.ui.LocalVideoView
-        android:id="@+id/local_video_view"
+    <cordova.plugin.qnrtc.ui.UserTrackViewFullScreen
+        android:id="@+id/track_window_full_screen"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <cordova.plugin.qnrtc.ui.RemoteVideoView
-        android:id="@+id/remote_video_view_a"
+    <cordova.plugin.qnrtc.ui.UserTrackView
+        android:id="@+id/track_window_a"
+        android:layout_width="0dp"
+        android:layout_height="0dp"/>
+
+    <cordova.plugin.qnrtc.ui.UserTrackView
+        android:id="@+id/track_window_b"
         android:layout_width="0dp"
         android:layout_height="0dp" />
 
-    <cordova.plugin.qnrtc.ui.RemoteVideoView
-        android:id="@+id/remote_video_view_b"
+    <cordova.plugin.qnrtc.ui.UserTrackView
+        android:id="@+id/track_window_c"
         android:layout_width="0dp"
         android:layout_height="0dp" />
 
-    <cordova.plugin.qnrtc.ui.RemoteVideoView
-        android:id="@+id/remote_video_view_c"
+    <cordova.plugin.qnrtc.ui.UserTrackView
+        android:id="@+id/track_window_d"
         android:layout_width="0dp"
         android:layout_height="0dp" />
 
-    <cordova.plugin.qnrtc.ui.RemoteVideoView
-        android:id="@+id/remote_video_view_d"
+    <cordova.plugin.qnrtc.ui.UserTrackView
+        android:id="@+id/track_window_e"
         android:layout_width="0dp"
         android:layout_height="0dp" />
 
-    <cordova.plugin.qnrtc.ui.RemoteVideoView
-        android:id="@+id/remote_video_view_e"
+    <cordova.plugin.qnrtc.ui.UserTrackView
+        android:id="@+id/track_window_f"
         android:layout_width="0dp"
         android:layout_height="0dp" />
 
-    <cordova.plugin.qnrtc.ui.RemoteVideoView
-        android:id="@+id/remote_video_view_f"
+    <cordova.plugin.qnrtc.ui.UserTrackView
+        android:id="@+id/track_window_g"
         android:layout_width="0dp"
         android:layout_height="0dp" />
 
-    <cordova.plugin.qnrtc.ui.RemoteVideoView
-        android:id="@+id/remote_video_view_g"
+    <cordova.plugin.qnrtc.ui.UserTrackView
+        android:id="@+id/track_window_h"
         android:layout_width="0dp"
         android:layout_height="0dp" />
 
-    <cordova.plugin.qnrtc.ui.RemoteVideoView
-        android:id="@+id/remote_video_view_h"
+    <cordova.plugin.qnrtc.ui.UserTrackView
+        android:id="@+id/track_window_i"
         android:layout_width="0dp"
         android:layout_height="0dp" />
 
@@ -59,4 +63,5 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center|bottom"
         android:paddingBottom="32dp" />
+
 </FrameLayout>
