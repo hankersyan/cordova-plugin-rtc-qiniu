@@ -190,7 +190,7 @@ public class Room2Activity extends CordovaActivity implements QNRTCEngineEventLi
         initLocalTrackInfoList();
 
         // init decorate and set default to p2p mode
-        mTrackWindowMgr = new TrackWindowMgr(mUserId, mScreenWidth, mScreenHeight, outMetrics.density
+        mTrackWindowMgr = new TrackWindowMgr(mUserId, mScreenHeight, mScreenWidth, outMetrics.density
                 , mEngine, mTrackWindowFullScreen, mTrackWindowsList);
 
         List<QNTrackInfo> localTrackListExcludeScreenTrack = new ArrayList<>(mLocalTrackList);

@@ -18,14 +18,16 @@
 
         <org.apache.cordova.engine.SystemWebView
             android:id="@+id/webview"
-            android:layout_width="300dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="match_parent"
             android:background="#fff">
 
         </org.apache.cordova.engine.SystemWebView>
 
         <FrameLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="match_parent">
 
             <cordova.plugin.qnrtc.ui.UserTrackView
