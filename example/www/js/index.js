@@ -35,18 +35,25 @@ var app = {
         var parentElement = document.getElementById(id);
         var listeningElement = parentElement.querySelector('.listening');
         var receivedElement = parentElement.querySelector('.received');
-        var btnElem = parentElement.querySelector('.button');
+        var startConference = parentElement.querySelector('#startConference');
+        var startWithWeb = parentElement.querySelector('#startWithWeb');
 
         listeningElement.setAttribute('style', 'display:none;');
         receivedElement.setAttribute('style', 'display:block;');
 
-        btnElem.addEventListener('click', this.startConference.bind(this), false);
+        startConference.addEventListener('click', this.startConference.bind(this), false);
+        startWithWeb.addEventListener('click', this.startWithWeb.bind(this), false);
         document.getElementById('name').value = 'u' + Math.floor((Math.random() * 1000) + 1);
 
         console.log('Received Event: ' + id);
     },
-
     startConference: function() {
+        this.start(false);
+    },
+    startWithWeb: function() {
+        this.start(true);
+    },
+    start: function(isWithWeb) {
         if (typeof QNRtc == 'undefined') {
             alert('QNRtc plugin not found');
             return;
@@ -66,9 +73,14 @@ var app = {
                 user_id: userId,
                 room_name: roomName,
                 enable_merge_stream: true, // 合流
-                room_token: this.responseText
+                room_token: this.responseText,
+                url: isWithWeb ? "https://qq.com":undefined
             }
-            QNRtc.start(para);
+            if (isWithWeb) {
+                QNRtc.startWithWeb(para); // 分屏
+            } else {
+                QNRtc.start(para);
+            }
         });
         oReq.open("GET", "https://api-demo.qnsdk.com/v1/rtc/token/admin/" +
             "app/" + appId +

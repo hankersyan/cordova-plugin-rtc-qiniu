@@ -27,11 +27,13 @@
 			<uses-permission android:name="android.permission.WAKE_LOCK" />
         </config-file>
         <config-file target="AndroidManifest.xml" parent="/manifest/application">
-			<activity android:configChanges="orientation|smallestScreenSize|screenSize|screenLayout" android:launchMode="singleTop" android:name="cordova.plugin.qnrtc.activity.RoomActivity" android:screenOrientation="portrait" />
+			<activity android:configChanges="orientation|smallestScreenSize|screenSize|screenLayout" android:launchMode="singleTask" android:name="cordova.plugin.qnrtc.activity.RoomActivity" android:screenOrientation="portrait" />
+			<activity android:configChanges="orientation|smallestScreenSize|screenSize|screenLayout" android:launchMode="singleTask" android:name="cordova.plugin.qnrtc.activity.Room2Activity" android:screenOrientation="landscape" />
         </config-file>
 
         <!-- Plugin souce code -->
         <source-file src="src/android/QNRtc.java" target-dir="src/cordova/plugin/qnrtc" />
+        <source-file src="src/android/activity/Room2Activity.java" target-dir="src/cordova/plugin/qnrtc/activity" />
         <source-file src="src/android/activity/RoomActivity.java" target-dir="src/cordova/plugin/qnrtc/activity" />
         <source-file src="src/android/activity/LiveRoomActivity.java" target-dir="src/cordova/plugin/qnrtc/activity" />
         <source-file src="src/android/fragment/ControlFragment.java" target-dir="src/cordova/plugin/qnrtc/fragment" />

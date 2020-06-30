@@ -20,6 +20,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+import cordova.plugin.qnrtc.activity.Room2Activity;
 import cordova.plugin.qnrtc.activity.RoomActivity;
 import cordova.plugin.qnrtc.utils.ToastUtils;
 
@@ -58,6 +59,12 @@ public class QNRtc extends CordovaPlugin {
             }
             startConference(args, callbackContext);
             return true;
+        } else if (action.equals("startWithWeb")) {
+            if (this.isNeedCheckPermissions(needPermissions)) {
+                this.checkPermissions(needPermissions);
+            }
+            startConferenceWithWeb(args, callbackContext);
+            return true;
         } else if (action.equals("init")) {
             JSONObject params = args.getJSONObject(0);
             _appId = params.has("app_id") ? params.getString("app_id") : "";
@@ -74,7 +81,7 @@ public class QNRtc extends CordovaPlugin {
     private boolean isNeedCheck = true;
 
     /**
-     * 获取定位
+     * 开始会议
      */
     public void startConference(final CordovaArgs args, final CallbackContext callbackContext) {
         String userId;
@@ -113,6 +120,52 @@ public class QNRtc extends CordovaPlugin {
 					});
 				}
 			}).start();
+        } catch (JSONException e) {
+            callbackContext.error("参数格式错误");
+            return;
+        }
+    }
+
+    public void startConferenceWithWeb(final CordovaArgs args, final CallbackContext callbackContext) {
+        String userId;
+        String roomName;
+        String roomToken;
+        String enableMergeStream;
+        JSONObject params;
+        String url;
+
+        try {
+            params = args.getJSONObject(0);
+            userId = params.has("user_id") ? params.getString("user_id") : "";
+            roomName = params.has("room_name") ? params.getString("room_name") : "";
+            roomToken = params.has("room_token") ? params.getString("room_token") : "";
+            enableMergeStream = params.has("enable_merge_stream") ? params.getString("enable_merge_stream") : "";
+            url = params.has("url") ? params.getString("url") : "";
+
+            Activity myActivity = this.cordova.getActivity();
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+
+                    myActivity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (roomToken == null) {
+                                ToastUtils.s(myActivity, "empty token");
+                                return;
+                            }
+                            Intent intent = new Intent(myActivity, Room2Activity.class);
+                            intent.putExtra(Room2Activity.EXTRA_ROOM_ID, roomName.trim());
+                            intent.putExtra(Room2Activity.EXTRA_ROOM_TOKEN, roomToken);
+                            intent.putExtra(Room2Activity.EXTRA_USER_ID, userId);
+                            intent.putExtra(Room2Activity.EXTRA_MERGE_STREAM, enableMergeStream);
+                            intent.putExtra(Room2Activity.EXTRA_URL, url);
+                            myActivity.startActivity(intent);
+                        }
+                    });
+                }
+            }).start();
         } catch (JSONException e) {
             callbackContext.error("参数格式错误");
             return;

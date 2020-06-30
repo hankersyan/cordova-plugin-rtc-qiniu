@@ -18,7 +18,14 @@ module.exports = {
             success = param;
             param = null;
         }
-        param = param || { retGeo: false };
         exec(success, error, "QNRtc", "start", [param]);
+    },
+    startWithWeb: function(param, success, error) {
+        if (isFunction(param)) {
+            error = success;
+            success = param;
+            param = null;
+        }
+        exec(success, error, "QNRtc", "startWithWeb", [param]);
     }
 };

@@ -70,6 +70,7 @@ public class Room2Activity extends CordovaActivity implements QNRTCEngineEventLi
     public static final String EXTRA_ROOM_TOKEN = "ROOM_TOKEN";
     public static final String EXTRA_ROOM_ID = "ROOM_ID";
     public static final String EXTRA_MERGE_STREAM = "MERGE_STREAM";
+    public static final String EXTRA_URL = "URL";
 
     private static final String[] MANDATORY_PERMISSIONS = {
             "android.permission.MODIFY_AUDIO_SETTINGS",
@@ -199,7 +200,7 @@ public class Room2Activity extends CordovaActivity implements QNRTCEngineEventLi
 
         webView = findViewById(QNRtc.getResourceId("webview", "id"));
 
-        String url = getIntent().getStringExtra("url");
+        String url = getIntent().getStringExtra(EXTRA_URL);
         if (url != null && !url.isEmpty()) {
             launchUrl = url;
         }
