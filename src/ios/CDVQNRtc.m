@@ -6,6 +6,7 @@
 #import "CDVQNRtc.h"
 #import "QRDPublicHeader.h"
 #import "QRDRTCViewController.h"
+#import "QRDWebVC.h"
 
 @interface CDVQNRtc ()
 
@@ -45,6 +46,33 @@
         
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             [self presentVC:rtcVC animated:YES completion:nil];
+        }];
+    }];
+}
+
+- (void)startWithWeb:(CDVInvokedUrlCommand *)command {
+    [self.commandDelegate runInBackground:^{
+        NSDictionary *param = [command.arguments objectAtIndex:0];
+
+        NSDictionary *configDic = [[NSUserDefaults standardUserDefaults] objectForKey:QN_SET_CONFIG_KEY];
+        if (!configDic) {
+            configDic = @{@"VideoSize":NSStringFromCGSize(CGSizeMake(480, 640)), @"FrameRate":@20};
+//            configDic = @{@"VideoSize":NSStringFromCGSize(CGSizeMake(720, 1280)), @"FrameRate":@20};
+        }
+
+        QRDWebVC* webvc = [[QRDWebVC alloc] init];
+        webvc.roomName = [param objectForKey:@"room_name"];
+        webvc.userId = [param objectForKey:@"user_id"];
+        webvc.roomToken = [param objectForKey:@"room_token"];
+        webvc.appId = [param objectForKey:@"app_id"];
+        webvc.configDic = configDic;
+        webvc.enableMergeStream = [param objectForKey:@"enable_merge_stream"];
+        webvc.url = [param objectForKey:@"url"];
+
+        NSLog(@"%@, %@, enableMergeStream=%d", webvc.roomName, webvc.userId, webvc.enableMergeStream);
+        
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            [self presentVC:webvc animated:YES completion:nil];
         }];
     }];
 }

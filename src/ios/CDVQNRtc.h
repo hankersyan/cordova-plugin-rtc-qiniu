@@ -11,5 +11,6 @@
 
 - (void)init:(CDVInvokedUrlCommand *)command;
 - (void)start:(CDVInvokedUrlCommand *)command;
+- (void)startWithWeb:(CDVInvokedUrlCommand *)command;
 
 @end

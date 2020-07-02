@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<plugin id="cordova-plugin-rtc-qiniu" version="2.2.0" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+<plugin id="cordova-plugin-rtc-qiniu" version="2.2.1" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
     <name>cordova-plugin-rtc-qiniu</name>
     <preference name="APPID" />
     <js-module name="cordova-plugin-rtc-qiniu" src="www/qnrtc.js">
@@ -212,6 +212,8 @@
             <string>远程沟通需要使用麦克风</string>
         </config-file>
 
+        <header-file src="src/ios/QRDWebVC.h" />
+        <source-file src="src/ios/QRDWebVC.m" />
         <header-file src="src/ios/CDVQNSettings.h" />
         <source-file src="src/ios/CDVQNSettings.m" />
         <header-file src="src/ios/CDVQNRtc.h" />
