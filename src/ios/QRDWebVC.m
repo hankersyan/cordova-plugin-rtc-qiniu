@@ -44,6 +44,7 @@
     rtc.appId = self.appId;
     rtc.configDic = self.configDic;
     rtc.enableMergeStream = self.enableMergeStream;
+    rtc.splitMode = true;
     //add as a childviewcontroller
     [self addChildViewController:rtc];
     // Add the child's View as a subview

@@ -207,7 +207,7 @@
     _beautyButton.selected = YES;//默认打开美颜
     
     CGFloat buttonWidth = 54;
-    NSInteger space = (UIScreen.mainScreen.bounds.size.width - buttonWidth * 3)/4;
+    NSInteger space = (UIScreen.mainScreen.bounds.size.width * (self.splitMode ? 0.5 : 1) - buttonWidth * 3)/4;
     
     NSArray *array = [NSArray arrayWithObjects:&buttons[3] count:3];
     [array mas_distributeViewsAlongAxis:(MASAxisTypeHorizontal) withFixedItemLength:buttonWidth leadSpacing:space tailSpacing:space];
@@ -230,6 +230,11 @@
         make.bottom.equalTo(self.mas_bottomLayoutGuide);
         make.top.equalTo(preView.mas_top);
     }];
+}
+
+- (void)viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
+    NSLog(@"bounds = %@", NSStringFromCGRect(self.view.bounds));
 }
 
 #pragma mark - 连麦时长计算
