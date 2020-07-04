@@ -28,6 +28,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(OrientationDidChange:) name:UIDeviceOrientationDidChangeNotification object:nil];
+
     self.view.backgroundColor = QRD_COLOR_RGBA(20, 20, 20, 1);
         
     self.mergeStreamSize = CGSizeMake(480, 848);
@@ -87,6 +89,8 @@
     [self stoptimer];
     [self.engine leaveRoom];
     
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+
     [super viewDidDisappear:animated];
 }
 
@@ -810,6 +814,21 @@
         return [firstUser caseInsensitiveCompare:self.userId];
     }
     return NO;
+}
+
+-(void)OrientationDidChange:(NSNotification*)notification {
+  UIDeviceOrientation Orientation=[[UIDevice currentDevice]orientation];
+
+  if (Orientation==UIDeviceOrientationLandscapeLeft) {
+      NSLog(@"Landscape Left");
+      self.engine.videoOrientation = AVCaptureVideoOrientationLandscapeRight;
+  } else if (Orientation==UIDeviceOrientationLandscapeRight) {
+      NSLog(@"Landscape Right");
+      self.engine.videoOrientation = AVCaptureVideoOrientationLandscapeLeft;
+  } else if(Orientation==UIDeviceOrientationPortrait) {
+      NSLog(@"Potrait Mode");
+      self.engine.videoOrientation = AVCaptureVideoOrientationPortrait;
+  }
 }
 
 @end
