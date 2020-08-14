@@ -36,7 +36,7 @@
         _traks = [[NSMutableArray alloc] init];
         _nameLabel = [[UILabel alloc] initWithFrame:CGRectZero];
         _nameLabel.numberOfLines = 0;
-        _nameLabel.textAlignment = NSTextAlignmentRight;
+        _nameLabel.textAlignment = NSTextAlignmentLeft; //NSTextAlignmentRight
         _nameLabel.adjustsFontSizeToFitWidth = YES;
         _nameLabel.textColor = [UIColor whiteColor];
         [self addSubview:_nameLabel];
@@ -53,9 +53,11 @@
         }];
 
         [_nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.bottom.equalTo(self);
-            make.left.equalTo(self.muteView.right);
-            make.right.equalTo(self);
+            make.top.equalTo(self);
+            make.left.equalTo(self);
+            //make.bottom.equalTo(self);
+            //make.left.equalTo(self.muteView.right);
+            //make.right.equalTo(self);
         }];
         
         _cameraView = [[QNVideoView alloc] init];
@@ -314,18 +316,21 @@
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         @try {
             NSString* url = CDVQNSettings.userInfoUrl;
-           url = [url stringByReplacingOccurrencesOfString:@"<USER_ID>" withString:userID];
-           NSString* result = [self getDataFrom:url];
-           NSLog(@"%@", result);
-           NSData *data = [result dataUsingEncoding:NSUTF8StringEncoding];
-           id json = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-           NSString *name = [json objectForKey:@"name"];
+            url = [url stringByReplacingOccurrencesOfString:@"<USER_ID>" withString:userID];
+            NSString* result = [self getDataFrom:url];
+            NSLog(@"%@", result);
+            NSData *data = [result dataUsingEncoding:NSUTF8StringEncoding];
+            id json = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+            NSString *name = [json objectForKey:@"name"];
 
-           dispatch_main_async_safe(^{
+            dispatch_main_async_safe(^{
                if (wkNameLabel) {
-                   wkNameLabel.text = name;
+                   if ([name length] > 0)
+                       wkNameLabel.text = name;
+                   else
+                       wkNameLabel.text = userID;
                }
-           });
+            });
         }
         @catch (NSException * e) {
            NSLog(@"Exception: %@", e);

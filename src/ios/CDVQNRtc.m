@@ -7,6 +7,7 @@
 #import "QRDPublicHeader.h"
 #import "QRDRTCViewController.h"
 #import "QRDWebVC.h"
+#import "CDVQNSettings.h"
 
 @interface CDVQNRtc ()
 
@@ -21,6 +22,13 @@
     [self retrieveMainWindow];
     
     [self initCompleteBlock];
+}
+
+- (void)init:(CDVInvokedUrlCommand *)command {
+    NSDictionary *param = [command.arguments objectAtIndex:0];
+ 
+    [CDVQNSettings setAppId:[param objectForKey:@"app_id"]];
+    [CDVQNSettings setUserInfoUrl:[param objectForKey:@"user_info_url"]];
 }
 
 - (void)start:(CDVInvokedUrlCommand *)command {

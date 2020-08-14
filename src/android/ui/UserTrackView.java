@@ -62,6 +62,7 @@ public class UserTrackView extends FrameLayout {
 
     private ImageView mMicrophoneStateView;
     private TextView mAudioView;
+    private TextView mNameTv;
 
     private QNRTCEngine mQNRTCEngine;
     private String mUserId;
@@ -136,6 +137,8 @@ public class UserTrackView extends FrameLayout {
         String apiUrl = QNRtc.getUserInfoUrl();
         if (apiUrl != null && !apiUrl.isEmpty()) {
             JSONObject found = findUser(mUserId);
+            if (mNameTv != null)
+                mNameTv.setText(mUserId);
             if (found != null) {
                 try {
                     mAudioView.setText(found.getString("name"));
@@ -369,6 +372,7 @@ public class UserTrackView extends FrameLayout {
 
     private void setAudioViewStateVisibility(int visibility) {
         mAudioView.setVisibility(visibility);
+        if (mNameTv != null) mNameTv.setVisibility(mAudioView.getVisibility() == VISIBLE ? INVISIBLE : VISIBLE);
     }
 
     public void setMicrophoneStateVisibility(int visibility) {
@@ -398,6 +402,7 @@ public class UserTrackView extends FrameLayout {
 
         mMicrophoneStateView = (ImageView) findViewById(QNRtc.getResourceId("microphone_state_view", "id"));
         mAudioView = (TextView) findViewById(QNRtc.getResourceId("qn_audio_view", "id"));
+        mNameTv = (TextView) findViewById(QNRtc.getResourceId("name_tv", "id"));
     }
 
     @Override
@@ -505,6 +510,7 @@ public class UserTrackView extends FrameLayout {
                         // UI thread
                         try {
                             mAudioView.setText(jObject.getString("name"));
+                            if (mNameTv != null) mNameTv.setText(jObject.getString("name"));
                         } catch (Exception ex) {
                             Log.e(TAG, ex.getMessage());
                         }
