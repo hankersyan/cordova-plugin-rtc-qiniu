@@ -12,7 +12,7 @@
 #import "UIView+Alert.h"
 #import <QNRTCKit/QNRTCKit.h>
 #import "QRDMergeInfo.h"
-
+#import "CDVQNSettings.h"
 
 @interface QRDRTCViewController ()
 
@@ -20,6 +20,7 @@
 @property (nonatomic, strong) NSMutableArray *mergeInfoArray;
 @property (nonatomic, assign) CGSize mergeStreamSize;
 @property (nonatomic, strong) NSString *mergeJobId;
+@property (nonatomic, strong) UILabel *mynameLabel;
 
 @end
 
@@ -112,6 +113,24 @@
     [self.view bringSubviewToFront:self.titleLabel];
 }
 
+- (void)setMyName:(NSString *)myName {
+    if (nil == self.mynameLabel) {
+        self.mynameLabel = [[UILabel alloc] init];
+        if (@available(iOS 9.0, *)) {
+            self.mynameLabel.font = [UIFont monospacedDigitSystemFontOfSize:14 weight:(UIFontWeightRegular)];
+        } else {
+            self.mynameLabel.font = [UIFont systemFontOfSize:14];
+        }
+        self.mynameLabel.textAlignment = NSTextAlignmentCenter;
+        self.mynameLabel.textColor = [UIColor whiteColor];
+        [self.engine.previewView addSubview:self.mynameLabel];
+    }
+    self.mynameLabel.text = myName;
+    [self.mynameLabel setFrame:CGRectMake(0, 0, 100, 40)];
+    [self.mynameLabel sizeToFit];
+    [self.engine.previewView bringSubviewToFront:self.mynameLabel];
+}
+
 - (void)joinRTCRoom {
     [self.view showNormalLoadingWithTip:@"加入房间中..."];
     [self.engine joinRoomWithToken:self.roomToken];
@@ -146,7 +165,7 @@
     self.engine.videoFrameRate = [_configDic[@"FrameRate"] integerValue];;
     self.engine.statisticInterval = 5;
     [self.engine setBeautifyModeOn:YES];
-    
+
     [self.colorView addSubview:self.engine.previewView];
     [self.renderBackgroundView addSubview:self.colorView];
     
@@ -158,6 +177,9 @@
         make.edges.equalTo(self.renderBackgroundView);
     }];
     
+    [self setMyName:self.userId];
+    [self refreshName:self.userId];
+
     [self.engine startCapture];
 }
 
@@ -397,6 +419,7 @@
     dispatch_main_async_safe(^{
         [self hideLoading];
         [self.view showSuccessTip:@"发布成功了"];
+        NSLog(@"本地发布成功，tracks=%lu", (unsigned long)[tracks count]);
         
         for (QNTrackInfo *trackInfo in tracks) {
             if (trackInfo.kind == QNTrackKindAudio) {
@@ -509,7 +532,7 @@
             if (!userView) {
                 userView = [self createUserViewWithTrackId:trackInfo.trackId userId:userId];
                 [self.userViewArray addObject:userView];
-                NSLog(@"createRenderViewWithTrackId: %@", trackInfo.trackId);
+                NSLog(@"createRenderViewWithTrackId: %@, %lu", trackInfo.trackId, (unsigned long)[self.userViewArray count]);
             }
             if (nil == userView.superview) {
                 [self addRenderViewToSuperView:userView];
@@ -829,6 +852,54 @@
       NSLog(@"Potrait Mode");
       self.engine.videoOrientation = AVCaptureVideoOrientationPortrait;
   }
+}
+
+- (NSString *) getDataFrom:(NSString *)url{
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+    [request setHTTPMethod:@"GET"];
+    [request setURL:[NSURL URLWithString:url]];
+
+    NSError *error = nil;
+    NSHTTPURLResponse *responseCode = nil;
+
+    NSLog(@"GET %@", url);
+    
+    NSData *oResponseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&responseCode error:&error];
+
+    if([responseCode statusCode] != 200){
+        NSLog(@"Error getting %@, HTTP status code %li", url, (long)[responseCode statusCode]);
+        return nil;
+    }
+
+    return [[NSString alloc] initWithData:oResponseData encoding:NSUTF8StringEncoding];
+}
+
+-(void) refreshName:(NSString*)userID {
+    __weak UILabel *wkNameLabel = self.mynameLabel;
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        @try {
+            NSString* url = CDVQNSettings.userInfoUrl;
+            url = [url stringByReplacingOccurrencesOfString:@"<USER_ID>" withString:userID];
+            NSString* result = [self getDataFrom:url];
+            NSLog(@"%@", result);
+            NSData *data = [result dataUsingEncoding:NSUTF8StringEncoding];
+            id json = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+            NSString *name = [json objectForKey:@"name"];
+
+            dispatch_main_async_safe(^{
+               if (wkNameLabel) {
+                   if ([name length] > 0) {
+                       wkNameLabel.text = name;
+                        [self setMyName:name];
+                   } else
+                       wkNameLabel.text = userID;
+               }
+            });
+        }
+        @catch (NSException * e) {
+           NSLog(@"Exception: %@", e);
+        }
+    });
 }
 
 @end
