@@ -22,6 +22,10 @@
     CGFloat w2 = self.view.bounds.size.width * 0.5;
 
     CDVViewController* web = [[CDVViewController alloc] init];
+    NSString *configFile = [[NSBundle mainBundle] pathForResource:@"config_webview" ofType:@"xml"];
+    BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:configFile];
+    if (fileExists)
+        [web setConfigFile:configFile];
     //add as a childviewcontroller
     [self addChildViewController:web];
     // Add the child's View as a subview
@@ -49,7 +53,7 @@
     [self addChildViewController:rtc];
     // Add the child's View as a subview
     [self.view addSubview:rtc.view];
-    rtc.view.frame = CGRectMake(w2, 0, w2, self.view.bounds.size.height);
+    rtc.view.frame = CGRectMake(w2, 0, self.view.bounds.size.width - w2, self.view.bounds.size.height);
     [rtc.view setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
     // tell the childviewcontroller it's contained in it's parent
     [rtc didMoveToParentViewController:self];
