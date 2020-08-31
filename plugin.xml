@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<plugin id="cordova-plugin-rtc-qiniu" version="2.2.2" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+<plugin id="cordova-plugin-rtc-qiniu" version="2.4.0" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
     <name>cordova-plugin-rtc-qiniu</name>
     <preference name="APPID" />
     <js-module name="cordova-plugin-rtc-qiniu" src="www/qnrtc.js">
@@ -60,7 +60,7 @@
         <framework src="com.android.support.constraint:constraint-layout:1.1.3"/>
 
         <!-- sdk -->
-        <source-file src="src/android/libs/qndroid-rtc-2.3.0.jar" target-dir="app/libs"/>
+        <source-file src="src/android/libs/qndroid-rtc-2.4.0.jar" target-dir="app/libs"/>
         <source-file src="src/android/libs/pldroid-player-2.1.4.jar" target-dir="app/libs"/>
 
         <resource-file src="src/android/libs/armeabi-v7a/libqcCodec.so" target="jniLibs/armeabi-v7a/libqcCodec.so"/>

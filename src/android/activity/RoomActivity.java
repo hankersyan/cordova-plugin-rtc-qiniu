@@ -386,6 +386,11 @@ public class RoomActivity extends Activity implements QNRTCEngineEventListener, 
     }
 
     @Override
+    public void onRoomLeft() {
+
+    }
+
+    @Override
     public void onRemoteUserJoined(String remoteUserId, String userData) {
         updateRemoteLogText("onRemoteUserJoined:remoteUserId = " + remoteUserId + " ,userData = " + userData);
         mRemoteUserList.onUserJoined(remoteUserId, userData);
@@ -459,6 +464,11 @@ public class RoomActivity extends Activity implements QNRTCEngineEventListener, 
                 mControlFragment.updateLocalVideoLogText(log);
             }
         }
+    }
+
+    @Override
+    public void onRemoteStatisticsUpdated(List<QNStatisticsReport> list) {
+
     }
 
     @Override

@@ -324,6 +324,11 @@ public class LiveRoomActivity extends Activity implements QNRTCEngineEventListen
     }
 
     @Override
+    public void onRoomLeft() {
+
+    }
+
+    @Override
     public void onRemoteUserJoined(String remoteUserId, String userData) {
         logAndUpdateRemoteLogText("onRemoteUserJoined : " + remoteUserId);
         mRemoteUserList.onUserJoined(remoteUserId, userData);
@@ -399,6 +404,11 @@ public class LiveRoomActivity extends Activity implements QNRTCEngineEventListen
     @Override
     public void onStatisticsUpdated(QNStatisticsReport report) {
         Log.i(TAG, "onStatisticsUpdated");
+    }
+
+    @Override
+    public void onRemoteStatisticsUpdated(List<QNStatisticsReport> list) {
+
     }
 
     @Override

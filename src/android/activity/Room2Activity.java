@@ -405,6 +405,11 @@ public class Room2Activity extends CordovaActivity implements QNRTCEngineEventLi
     }
 
     @Override
+    public void onRoomLeft() {
+
+    }
+
+    @Override
     public void onRemoteUserJoined(String remoteUserId, String userData) {
         updateRemoteLogText("onRemoteUserJoined:remoteUserId = " + remoteUserId + " ,userData = " + userData);
         mRemoteUserList.onUserJoined(remoteUserId, userData);
@@ -478,6 +483,11 @@ public class Room2Activity extends CordovaActivity implements QNRTCEngineEventLi
                 mControlFragment.updateLocalVideoLogText(log);
             }
         }
+    }
+
+    @Override
+    public void onRemoteStatisticsUpdated(List<QNStatisticsReport> list) {
+
     }
 
     @Override
