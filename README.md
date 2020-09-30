@@ -15,7 +15,7 @@ Please apply for APPID at https://www.qiniu.com/products/rtn . 请先申请你�
 # Install
 
 ```bash
-cordova plugin add cordova-plugin-rtc-qiniu --variable APIID=YOU_APPID
+cordova plugin add cordova-plugin-rtc-qiniu --variable APPID=YOU_APPID
 ```
 
 # 功能
