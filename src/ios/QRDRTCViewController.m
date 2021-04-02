@@ -30,7 +30,7 @@
     [super viewDidLoad];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(OrientationDidChange:) name:UIDeviceOrientationDidChangeNotification object:nil];
-
+    
     self.view.backgroundColor = QRD_COLOR_RGBA(20, 20, 20, 1);
         
     self.mergeStreamSize = CGSizeMake(480, 848);
@@ -65,6 +65,8 @@
     if ([self.roomToken length] > 0) {
         [self joinRTCRoom];
     }
+    
+    [self handleOrientation];
 }
 
 - (void)conferenceAction:(UIButton *)conferenceButton {
@@ -89,10 +91,12 @@
 - (void)viewDidDisappear:(BOOL)animated {
     [self stoptimer];
     [self.engine leaveRoom];
-    
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
 
     [super viewDidDisappear:animated];
+}
+
+-(void) dealloc {
+      [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)setTitle:(NSString *)title {
@@ -839,19 +843,26 @@
     return NO;
 }
 
--(void)OrientationDidChange:(NSNotification*)notification {
-  UIDeviceOrientation Orientation=[[UIDevice currentDevice]orientation];
+-(void)handleOrientation {
+    UIDeviceOrientation Orientation=[[UIDevice currentDevice]orientation];
 
-  if (Orientation==UIDeviceOrientationLandscapeLeft) {
-      NSLog(@"Landscape Left");
-      self.engine.videoOrientation = AVCaptureVideoOrientationLandscapeRight;
-  } else if (Orientation==UIDeviceOrientationLandscapeRight) {
-      NSLog(@"Landscape Right");
-      self.engine.videoOrientation = AVCaptureVideoOrientationLandscapeLeft;
-  } else if(Orientation==UIDeviceOrientationPortrait) {
-      NSLog(@"Potrait Mode");
-      self.engine.videoOrientation = AVCaptureVideoOrientationPortrait;
-  }
+    if (Orientation == UIDeviceOrientationLandscapeLeft) {
+        NSLog(@"Landscape Left");
+        self.engine.videoOrientation = AVCaptureVideoOrientationLandscapeRight;
+    } else if (Orientation == UIDeviceOrientationLandscapeRight) {
+        NSLog(@"Landscape Right");
+        self.engine.videoOrientation = AVCaptureVideoOrientationLandscapeLeft;
+    } else if(Orientation == UIDeviceOrientationPortrait) {
+        NSLog(@"Potrait Mode");
+        self.engine.videoOrientation = AVCaptureVideoOrientationPortrait;
+    } else if(Orientation == UIDeviceOrientationPortraitUpsideDown) {
+        NSLog(@"Potrait UpsideDown Mode");
+        self.engine.videoOrientation = AVCaptureVideoOrientationPortraitUpsideDown;
+    }
+}
+
+-(void)OrientationDidChange:(NSNotification*)notification {
+    [self handleOrientation];
 }
 
 - (NSString *) getDataFrom:(NSString *)url{
